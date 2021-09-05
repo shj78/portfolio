@@ -1,4 +1,5 @@
 # 심혜진 포트폴리오
+
 > 매순간 배움을 즐기는 개발자 심혜진입니다.
 
 </br>
@@ -20,7 +21,6 @@
 >  
 >기술 스택:  
 >Java 8 
-
 >  
 >[프로젝트 상세 설명](www.naver.com) 참고
 
@@ -37,11 +37,20 @@
 
 ---
 
-### 3. [파이널 프로젝트]
+### 3. [파이널 프로젝트 - LEGGO]
 >여행 일정 및 여행기 공유 서비스 (팀 프로젝트)  
 >개발 기간: 2021.5 ~ 2021.7  
 >  
 >기술 스택:  
->Java 8 / Spring / HTML / CSS / Javascript / myBatis 
+>Java 8 / Oracle / Spring / HTML / CSS / Javascript / myBatis 
+>  
+>[프로젝트 상세 설명](www.naver.com) 참고
+
+### 3. [개인 프로젝트 - ZAGO]
+>일정 작성 및 공유 서비스 (개인 프로젝트)  
+>개발 기간: 2021.9
+>  
+>기술 스택:  
+>Java 8 / Oracle / Spring / HTML / CSS / Javascript / myBatis 
 >  
 >[프로젝트 상세 설명](www.naver.com) 참고
