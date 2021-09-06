@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="com.leggo.myplan.IMyPlanDAO">
+
+	<select id="MyPlanSelect" resultType="com.leggo.myplan.MyPlanDTO">
+		SELECT PL_CD, PL_TT, PL_IMG, PL_HITS, PL_DT
+		FROM PLAN
+		WHERE MEM_CD = (SELECT MEM_CD FROM MEMBER_DATA WHERE MEM_ID=#{mem_id})
+	</select>
+	
+</mapper>

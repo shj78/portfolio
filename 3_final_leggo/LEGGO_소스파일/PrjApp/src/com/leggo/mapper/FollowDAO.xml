@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="com.leggo.follow.IFollowDAO">
+
+	<select id="FollowerSelect" resultType="com.leggo.follow.FollowDTO">
+        SELECT M.MEM_NNM AS FOLLOW_MEM_NNM, MEM_IMG AS FOLLOW_MEM_IMG, MEM_ID AS FOLLOW_MEM_ID
+        FROM FOLLOW F, MEMBER_DATA M
+        WHERE F.MEM_ING_CD = M.MEM_CD AND MEM_ED_CD = (SELECT MEM_CD FROM MEMBER_DATA WHERE MEM_ID = #{mem_id})
+	</select>
+	
+	<select id="FollowingSelect" resultType="com.leggo.follow.FollowDTO">
+        SELECT M.MEM_NNM AS FOLLOW_MEM_NNM, MEM_IMG AS FOLLOW_MEM_IMG, MEM_ID AS FOLLOW_MEM_ID
+        FROM FOLLOW F, MEMBER_DATA M
+        WHERE F.MEM_ED_CD = M.MEM_CD AND MEM_ING_CD = (SELECT MEM_CD FROM MEMBER_DATA WHERE MEM_ID = #{mem_id})
+	</select>
+	
+	<select id="followbackCck" resultType="java.lang.Integer">
+	    SELECT COUNT(*) AS COUNT FROM FOLLOW
+        WHERE MEM_ING_CD = (SELECT MEM_CD FROM MEMBER_DATA WHERE MEM_ID = #{mem_ing_id})
+          AND MEM_ED_CD = (SELECT MEM_CD FROM MEMBER_DATA WHERE MEM_ID= #{mem_ed_id})
+	</select>
+	
+	<insert id="Follow">
+		INSERT INTO FOLLOW(FOL_CD, MEM_ING_CD, MEM_ED_CD)
+		VALUES('FLW'||FLWSEQUENCE.NEXTVAL,
+		      (SELECT MEM_CD FROM MEMBER_DATA WHERE MEM_ID=#{mem_ing_id}),
+		      (SELECT MEM_CD FROM MEMBER_DATA WHERE MEM_ID=#{mem_ed_id}))
+	</insert>
+	
+	<delete id="Unfollow">
+		DELETE FROM FOLLOW
+		WHERE MEM_ING_CD = (SELECT MEM_CD FROM MEMBER_DATA WHERE MEM_ID=#{mem_ing_id})
+		  AND MEM_ED_CD = (SELECT MEM_CD FROM MEMBER_DATA WHERE MEM_ID=#{mem_ed_id})
+	</delete>
+	
+	<select id="FollowingPost" resultType="com.leggo.follow.FollowPostDTO">
+		SELECT POST_CD, POST_TT, POST_IMG
+		FROM VIEWPOST
+		WHERE MEM_CD = (SELECT MEM_CD FROM MEMBER_DATA WHERE MEM_ID = #{mem_id})
+	</select>
+	
+</mapper>

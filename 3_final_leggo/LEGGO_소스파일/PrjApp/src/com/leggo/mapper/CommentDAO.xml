@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="com.leggo.mybatis.ICommentDAO">
+
+	<select id="list" resultType="com.leggo.mybatis.CommentDTO">
+		SELECT CD, MEM_NNM, CONT, DT, POST_CD, CMT_DT
+		FROM 
+		(
+		    SELECT PC.PL_CMT_CD AS CD, MD.MEM_NNM AS MEM_NNM, PC.PL_CMT_CONT AS CONT, TO_CHAR(PC.PL_CMT_DT, 'YYYY-MM-DD') AS DT, PC.PL_CD AS POST_CD, PC.PL_CMT_DT AS CMT_DT
+		    FROM PLAN_COMMENT PC LEFT JOIN MEMBER_DATA MD
+		         ON PC.MEM_CD = MD.MEM_CD
+		) UNION ALL                
+		(
+		    SELECT TC.TR_CMT_CD AS CD, MD.MEM_NNM AS MEM_NNM, TC.TR_CMT_CONT AS CONT, TO_CHAR(TC.TR_CMT_DT, 'YYYY-MM-DD') AS DT, TC.TR_CD AS POST_CD, TC.TR_CMT_DT AS CMT_DT
+		    FROM TRIP_COMMENT TC LEFT JOIN MEMBER_DATA MD
+		            ON TC.MEM_CD = MD.MEM_CD
+		) UNION ALL
+		(
+		    SELECT PPC.PPC_CD AS CD, MD.MEM_NNM AS MEM_NNM, PPC.PPC_CONT AS CONT, TO_CHAR(PPC.PPC_DT, 'YYYY-MM-DD') AS DT, PPC.PP_CD AS POST_CD, PPC.PPC_DT AS CMT_DT
+		    FROM PHOTO_POST_COMMENT PPC LEFT JOIN MEMBER_DATA MD
+		            ON PPC.MEM_CD = MD.MEM_CD
+		)
+		ORDER BY CMT_DT DESC
+	</select>
+	
+	<select id="totCount" resultType="java.lang.Integer">
+		SELECT SUM(A.COUNT + B.COUNT + C.COUNT) AS COUNT
+		FROM 
+		(
+			SELECT COUNT(*) AS COUNT
+			FROM PLAN_COMMENT
+		) A
+		, (
+			SELECT COUNT(*) AS COUNT
+			FROM TRIP_COMMENT
+		) B
+		, (
+			SELECT COUNT(*) AS COUNT
+			FROM PHOTO_POST_COMMENT
+		) C
+	</select>
+	
+	<select id="count" resultType="java.lang.Integer">
+		SELECT SUM(A.COUNT + B.COUNT + C.COUNT) AS COUNT
+		FROM 
+		(
+			SELECT COUNT(*) AS COUNT
+			FROM PLAN_COMMENT
+			WHERE TO_CHAR(PL_CMT_DT, 'YYYY-MM-DD') = TO_CHAR(SYSDATE, 'YYYY-MM-DD')
+		) A
+		, (
+			SELECT COUNT(*) AS COUNT
+			FROM TRIP_COMMENT
+			WHERE TO_CHAR(TR_CMT_DT, 'YYYY-MM-DD') = TO_CHAR(SYSDATE, 'YYYY-MM-DD')
+		) B
+		, (
+			SELECT COUNT(*) AS COUNT
+			FROM PHOTO_POST_COMMENT
+			WHERE TO_CHAR(PPC_DT, 'YYYY-MM-DD') = TO_CHAR(SYSDATE, 'YYYY-MM-DD')
+		) C
+	</select>
+	
+</mapper>

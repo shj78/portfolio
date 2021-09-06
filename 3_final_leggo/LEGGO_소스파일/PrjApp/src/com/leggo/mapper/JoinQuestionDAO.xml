@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="com.leggo.mybatis.IJoinQuestionDAO">
+
+	<select id="list" resultType="com.leggo.mybatis.JoinQuestionDTO">
+		SELECT JQ.JOIN_QST_CD, MD.MEM_NNM, JQ.JOIN_QST_1, JQ.JOIN_QST_2, JQ.JOIN_QST_3, TO_CHAR(JQ.JOIN_QST_DT, 'YYYY-MM-DD') AS DT, JOIN_QST_DT
+		FROM JOIN_QUESTION JQ LEFT JOIN ADMIN A
+	                ON JQ.ADMIN_CD = A.ADMIN_CD
+	                    LEFT JOIN MEMBER_DATA MD
+	                        ON A.MEM_CD = MD.MEM_CD
+		ORDER BY JOIN_QST_DT DESC
+	</select>
+	
+	<select id="count" resultType="java.lang.Integer">
+		SELECT COUNT(*) AS COUNT
+		FROM JOIN_QUESTION
+	</select>
+	
+</mapper>

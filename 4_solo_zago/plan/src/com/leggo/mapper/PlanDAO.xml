@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.leggo.plan.IPlanDAO" >
+
+	<!-- add()호출 -->
+	<!-- 몇행을 인서트 타입 = resulType -->
+	<insert id="insertplan" parameterType="com.leggo.plan.PlanDTO"> 
+		INSERT INTO PLAN(PL_CD, MEM_CD, PL_STRT_DT, PL_END_DT
+		, PL_TT, PL_STT, PL_PPL, OPEN_CD)
+		VALUES('PLAN1', 'MEM1', #{PL_STRT_DT, jdbcType=DATE}, #{PL_END_DT, jdbcType=DATE}
+		, #{PL_TT, jdbcType=VARCHAR}, #{PL_STT, jdbcType=VARCHAR}, #{PL_PPL, jdbcType=NUMERIC}, #{OPEN_CD, jdbcType=NUMERIC} )  
+	</insert>
+	
+ 	<insert id="insertaddloc" parameterType="com.leggo.plan.PlanADTO"> 
+		INSERT INTO ADD_LOCATION
+		(LOC_CD, PL_CD
+		, LOC_NM
+		, CITY_CD	 
+		, LOC_LAT, LOC_LONG
+		, LOC_DESC, LOC_STRT_TIME) 
+		VALUES('ADD_LOC1', 'PLAN1'
+		, #{LOC_NM}
+		, 'CITY7'
+		, #{LOC_LAT}, #{LOC_LONG}
+		, #{LOC_DESC}, #{LOC_STRT_TIME})	 
+	</insert> 
+	
+<!-- 	<select id="planlist" resultType="com.leggo.complan.ComPlanDTO">
+		SELECT MD.MEM_NNM, PL.PL_TT, PL.PL_ST, TO_CHAR(PL.PL_DT, 'YYYY-MM-DD')
+		FROM PLAN PL LEFT JOIN MEMBER_DATA MD
+     	ON PL.MEM_CD = MD.MEM_CD
+	</select> -->
+	
+</mapper>
+
+

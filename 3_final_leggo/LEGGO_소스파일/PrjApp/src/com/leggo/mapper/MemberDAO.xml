@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="com.leggo.mybatis.IMemberDAO">
+
+	<select id="list" resultType="com.leggo.mybatis.MemberDTO">
+		SELECT MEM_CD, ACCT_ST, MEM_ID, MEM_NNM, TO_CHAR(MEM_JOIN_DT, 'YYYY-MM-DD') AS MEM_JOIN_DT, ADMIN_CD, SUBSTR(MEM_CD, 4) AS NUM
+		FROM MEMBERVIEW
+		ORDER BY NUM DESC
+	</select>
+	
+	<select id="joinCount" resultType="java.lang.Integer">
+		SELECT COUNT(*) AS COUNT
+		FROM MEMBER_DATA
+		WHERE TO_CHAR(MEM_JOIN_DT, 'YYYY-MM-DD') = TO_CHAR(SYSDATE, 'YYYY-MM-DD')
+	</select>
+	
+	<select id="memberProfile" resultType="com.leggo.mybatis.MemberDTO">
+		SELECT ACCT_ST, MEM_ID, MEM_NNM, MEM_JOIN_DT, ADMIN_CD,  QT_MEM_QUIT_DT, JOIN_MTD, MEM_DT_CD, MEM_IMG, MEM_CD
+		FROM MEMBERVIEW
+		WHERE MEM_CD = #{mem_cd}
+	</select>
+	
+	<select id="totCount" resultType="java.lang.Integer">
+		SELECT COUNT(*) AS COUNT
+		FROM MEMBERVIEW
+	</select>
+	
+	<select id="adminCheck" resultType="com.leggo.mybatis.MemberDTO">
+		SELECT COUNT(*) AS COUNT
+		FROM ADMIN 
+		WHERE MEM_CD = #{mem_cd}
+	</select>
+	
+	<insert id="memberUpdate">
+		INSERT INTO ADMIN(ADMIN_CD, MEM_CD)
+		VALUES( 'ADMIN' || ADMINSEQ.NEXTVAL, #{mem_cd})
+	</insert>
+	
+	<delete id="memberDelete">
+		DELETE FROM ADMIN
+		WHERE MEM_CD = #{mem_cd}
+	</delete>
+	
+</mapper>

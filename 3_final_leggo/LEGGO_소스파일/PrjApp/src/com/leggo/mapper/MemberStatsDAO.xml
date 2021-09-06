@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="com.leggo.mybatis.IMemberStatsDAO">
+
+	<select id="joinList" resultType="com.leggo.mybatis.MemberStatsDTO">
+		SELECT JOIN_DT
+	       		, MIN(DECODE(MTD, 'LEGGO', COUNT)) AS LEGGO
+	       		, MIN(DECODE(MTD, 'NAVER', COUNT)) AS NAVER
+	       		, MIN(DECODE(MTD, 'KAKAO', COUNT)) AS KAKAO
+	       		, MIN(DECODE(MTD, 'GOOGLE', COUNT)) AS GOOGLE
+	   FROM 
+		(
+			SELECT A.MEM_JOIN_DT AS JOIN_DT , A.JOIN_MTD AS MTD, NVL(B.COUNT, 0) AS COUNT
+			FROM 
+			    (
+			    SELECT TO_CHAR(M.MEM_JOIN_DT, 'YYYY-MM-DD') AS MEM_JOIN_DT, J.JOIN_MTD
+			    FROM JOIN_METHOD J, MEMBER_DATA M
+			    ) A LEFT JOIN
+			    (
+			    SELECT  TO_CHAR(M.MEM_JOIN_DT, 'YYYY-MM-DD') AS MEM_JOIN_DT, J.JOIN_MTD AS JOIN_MTD, COUNT(*) AS COUNT
+			    FROM MEMBER_DATA M LEFT JOIN JOIN_METHOD J
+			            ON M.JOIN_MTD_CD = J.JOIN_MTD_CD
+			    GROUP BY  TO_CHAR(M.MEM_JOIN_DT, 'YYYY-MM-DD'), J.JOIN_MTD
+			    ) B
+			ON A.MEM_JOIN_DT = B.MEM_JOIN_DT AND A.JOIN_MTD = B.JOIN_MTD
+		)
+		GROUP BY JOIN_DT
+		ORDER BY JOIN_DT DESC
+	</select>
+	
+	<select id="joinCount" resultType="java.lang.Integer">
+		SELECT COUNT(*) AS COUNT
+		FROM
+		(
+			SELECT TO_CHAR(MEM_JOIN_DT, 'YYYY-MM-DD') 
+			FROM MEMBER_DATA
+			GROUP BY TO_CHAR(MEM_JOIN_DT, 'YYYY-MM-DD')
+		)
+	</select>
+	
+	<select id="joinMtd" resultType="com.leggo.mybatis.MemberStatsDTO">
+		SELECT NVL(MIN(DECODE(MTD, 'LEGGO', COUNT)), 0) AS LEGGO
+		       , NVL(MIN(DECODE(MTD, 'NAVER', COUNT)), 0) AS NAVER
+		       , NVL(MIN(DECODE(MTD, 'KAKAO', COUNT)), 0) AS KAKAO
+		       , NVL(MIN(DECODE(MTD, 'GOOGLE', COUNT)), 0) AS GOOGLE
+		FROM
+		(
+			SELECT J.JOIN_MTD AS MTD, COUNT(*) AS COUNT
+			FROM MEMBER_DATA M LEFT JOIN JOIN_METHOD J
+			    ON J.JOIN_MTD_CD = M.JOIN_MTD_CD
+			GROUP BY J.JOIN_MTD
+		)
+	</select>
+	
+	<select id="joinDayList" resultType="com.leggo.mybatis.MemberStatsDTO">
+		SELECT A.DAY AS JOIN_DT, NVL(B.COUNT, 0) AS COUNT
+		FROM 
+		(
+			SELECT TO_CHAR(SYSDATE-LEVEL+1, 'YYYY-MM-DD') DAY
+			FROM DUAL
+			CONNECT BY LEVEL BETWEEN 1 AND 7
+		) A,
+		(
+			SELECT TO_CHAR(MEM_JOIN_DT, 'YYYY-MM-DD') AS DAY, COUNT(*) AS COUNT
+			FROM MEMBER_DATA
+			WHERE TO_CHAR(MEM_JOIN_DT, 'YYYY-MM-DD') BETWEEN TO_CHAR(SYSDATE-6, 'YYYY-MM-DD') AND TO_CHAR(SYSDATE, 'YYYY-MM-DD')
+			GROUP BY TO_CHAR(MEM_JOIN_DT, 'YYYY-MM-DD')
+		) B
+		WHERE A.DAY = B.DAY(+)
+		ORDER BY A.DAY
+	</select>
+	
+	<select id="qrdList" resultType="com.leggo.mybatis.MemberStatsDTO">
+		SELECT QRD_DT
+       , MIN(DECODE(RSN, '이용빈도 낮음', COUNT)) AS RSN1
+       , MIN(DECODE(RSN, '재가입', COUNT)) AS RSN2
+       , MIN(DECODE(RSN, '콘텐츠 부족', COUNT)) AS RSN3
+       , MIN(DECODE(RSN, '개인정보보호', COUNT)) AS RSN4
+       , MIN(DECODE(RSN, '기타', COUNT)) AS RSN5
+		FROM
+		(
+			SELECT A.QRD_DT AS QRD_DT , A.QT_RSN AS RSN, NVL(B.COUNT, 0) AS COUNT
+			FROM 
+				(
+				    SELECT TO_CHAR(D.QRD_DT, 'YYYY-MM-DD') AS QRD_DT, R.QT_RSN
+				    FROM QUIT_REASON R, QUIT_REASON_DATE D
+				) A LEFT JOIN
+				(
+					SELECT TO_CHAR(D.QRD_DT, 'YYYY-MM-DD') AS QRD_DT, R.QT_RSN AS QT_RSN, COUNT(*) COUNT
+					FROM QUIT_REASON_DATE D LEFT JOIN QUIT_REASON R
+					        ON D.QT_RSN_CD = R.QT_RSN_CD
+					GROUP BY TO_CHAR(D.QRD_DT, 'YYYY-MM-DD'), R.QT_RSN
+				) B
+			ON A.QRD_DT = B.QRD_DT AND A.QT_RSN = B.QT_RSN
+		)
+		GROUP BY QRD_DT
+		ORDER BY QRD_DT DESC
+	</select>
+	
+	<select id="qrdCount" resultType="java.lang.Integer">
+		SELECT COUNT(*) AS COUNT
+		FROM
+		(
+		    SELECT TO_CHAR(QRD_DT, 'YYYY-MM-DD') 
+		    FROM QUIT_REASON_DATE
+		    GROUP BY TO_CHAR(QRD_DT, 'YYYY-MM-DD')
+		)
+	</select>
+	
+	<select id="qrdRsn" resultType="com.leggo.mybatis.MemberStatsDTO">
+		SELECT NVL(MIN(DECODE(RSN, '이용빈도 낮음', COUNT)),0) AS RSN1
+	       , NVL(MIN(DECODE(RSN, '재가입', COUNT)),0) AS RSN2
+	       , NVL(MIN(DECODE(RSN, '콘텐츠 부족', COUNT)),0) AS RSN3
+	       , NVL(MIN(DECODE(RSN, '개인정보보호', COUNT)),0) AS RSN4
+	       , NVL(MIN(DECODE(RSN, '기타', COUNT)),0) AS RSN5
+		FROM
+		(
+			SELECT R.QT_RSN AS RSN, COUNT(*) AS COUNT
+			FROM QUIT_REASON_DATE D LEFT JOIN QUIT_REASON R
+			    ON D.QT_RSN_CD = R.QT_RSN_CD
+			GROUP BY R.QT_RSN
+		)
+	</select>
+	
+	<select id="qrdDayList" resultType="com.leggo.mybatis.MemberStatsDTO">
+		SELECT A.DAY AS QRD_DT, NVL(B.COUNT, 0) AS COUNT
+		FROM 
+		(
+			SELECT TO_CHAR(SYSDATE-LEVEL+1, 'YYYY-MM-DD') DAY
+			FROM DUAL
+			CONNECT BY LEVEL BETWEEN 1 AND 7
+		) A,
+		(
+			SELECT TO_CHAR(QRD_DT, 'YYYY-MM-DD') AS DAY, COUNT(*) AS COUNT
+			FROM QUIT_REASON_DATE
+			WHERE TO_CHAR(QRD_DT, 'YYYY-MM-DD') BETWEEN TO_CHAR(SYSDATE-6, 'YYYY-MM-DD') AND TO_CHAR(SYSDATE, 'YYYY-MM-DD')
+			GROUP BY TO_CHAR(QRD_DT, 'YYYY-MM-DD')
+		) B
+		WHERE A.DAY = B.DAY(+)
+		ORDER BY A.DAY
+	</select>
+	
+</mapper>

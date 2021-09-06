@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="com.leggo.signin.IMemberSigninDAO">
+
+	<insert id="SigninMember">
+		INSERT INTO MEMBER(MEM_CD, ACCT_ST_CD) VALUES('MEM'|| MEMBERSEQ.NEXTVAL, 0)
+	</insert>
+	
+	<insert id="SigninMemberData">
+		INSERT INTO MEMBER_DATA(MEM_DT_CD, MEM_CD, MEM_ID, MEM_PW, MEM_IMG, MEM_NNM, JOIN_MTD_CD)
+		VALUES('MDATA'|| MEMBERDATASEQ.NEXTVAL, 'MEM'|| MEMBERDATASEQ.NEXTVAL, #{mem_id}, CRYPTPACK.ENCRYPT(#{mem_pw},#{mem_pw}), 
+			'https://t3.ftcdn.net/jpg/03/46/83/96/360_F_346839683_6nAPzbhpSkIpb8pmAwufkC7c5eD7wYws.jpg',
+			#{mem_nnm}, 'JOIN1')
+	</insert>
+	
+</mapper>

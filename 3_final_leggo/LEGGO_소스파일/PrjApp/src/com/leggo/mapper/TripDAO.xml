@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="com.leggo.mybatis.ITripDAO">
+
+	<select id="list" resultType="com.leggo.mybatis.TripDTO">
+		SELECT TR_CD, MEM_NNM, TR_TT,  TO_CHAR(TR_DT, 'YYYY-MM-DD') AS TR_DT, TR_HITS, RPT_ST_CONT, TR_DT AS DT, CASE WHEN  RPT_ST_CONT IN('완료', '미완료', '처리중') THEN '블라인드'
+		                                                                                                        ELSE '정상'
+		                                                                                                        END BLIND
+		FROM TRIPVIEW
+		ORDER BY DT DESC
+	</select>
+	
+	<select id="count" resultType="java.lang.Integer">
+		SELECT COUNT(*) AS COUNT
+		FROM TRIPVIEW
+	</select>
+	
+	<select id="tripPost" resultType="com.leggo.mybatis.TripDTO">
+		SELECT TR_TT, MEM_NNM, TR_DT, BLIND, OPEN_ST
+		FROM
+		(
+			SELECT MEM_NNM, TR_TT,  TO_CHAR(TR_DT, 'YYYY-MM-DD') AS TR_DT, TR_DT AS DT, OPEN_ST , CASE WHEN  RPT_ST_CONT IN('완료', '미완료', '처리중') THEN '블라인드'
+			                                                                                     ELSE '정상'
+			                                                                                     END BLIND
+			FROM TRIPVIEW
+			WHERE TR_CD = #{tr_cd}
+			ORDER BY DT DESC
+		)
+		WHERE ROWNUM = 1
+	</select>
+	
+	<select id="rptList" resultType="com.leggo.mybatis.TripDTO">
+		SELECT TO_CHAR(TR.TR_RPT_DT, 'YYYY-MM-DD') AS DT, RS.RPT_ST_CONT , MD.MEM_NNM, TR.TR_RPT_DT, TR.TR_RPT_CD
+		FROM TRIP_REPORT TR LEFT JOIN REPORT_STATUS RS
+		        ON TR.RPT_ST_CD = RS.RPT_ST_CD
+		            LEFT JOIN ADMIN A
+		                ON TR.ADMIN_CD = A.ADMIN_CD
+		                    LEFT JOIN MEMBER_DATA MD
+		                        ON A.MEM_CD = MD.MEM_CD
+		WHERE TR_CD = #{tr_cd}
+		ORDER BY TR.TR_RPT_DT DESC
+	</select>
+	
+	<select id="rptCount" resultType="java.lang.Integer">
+		SELECT COUNT(*) AS COUNT
+		FROM TRIP_REPORT 
+		WHERE TR_CD = #{tr_cd}
+	</select>
+	
+</mapper>

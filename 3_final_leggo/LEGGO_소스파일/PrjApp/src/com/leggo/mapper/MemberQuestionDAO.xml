@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="com.leggo.mybatis.IMemberQuestionDAO">
+
+	<select id="list" resultType="com.leggo.mybatis.MemberQuestionDTO">
+		SELECT CTG_NM, MEM_QST_CD, MEM_NNM, MEM_QST_TT, MEM_QST_DT, TO_CHAR(MEM_QST_DT, 'YYYY-MM-DD') AS DT, CASE WHEN ADMIN_ANS_CD IS NULL THEN '미답변'
+                                                                                                    ELSE '답변' END STATE
+		FROM MEMQUESTIONVIEW
+		ORDER BY MEM_QST_DT DESC
+	</select>
+	
+	<select id="count" resultType="java.lang.Integer">
+		SELECT COUNT(*) AS COUNT
+		FROM MEMQUESTIONVIEW
+	</select>
+	
+	<select id="dayCount" resultType="java.lang.Integer">
+		SELECT COUNT(*) AS COUNT
+		FROM MEMQUESTIONVIEW
+		WHERE TO_CHAR(MEM_QST_DT, 'YYYY-MM-DD') = TO_CHAR(SYSDATE, 'YYYY-MM-DD')
+	</select>
+	
+	<select id="inquiryPost" resultType="com.leggo.mybatis.MemberQuestionDTO">
+		SELECT CTG_NM, MEM_QST_CD, MEM_NNM, MEM_QST_TT, MEM_QST_DT, mem_qst_cont, CASE WHEN ADMIN_ANS_CD IS NULL THEN '미답변'
+                                                                                                    ELSE '답변' END STATE
+		FROM MEMQUESTIONVIEW
+		WHERE MEM_QST_CD = #{mem_qst_cd}
+	</select>
+	
+</mapper>

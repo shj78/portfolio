@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.leggo.login.IMemberLoginDAO">
+
+	<select id="MemAcctCck" parameterType="com.leggo.login.MemberLoginDTO" resultType="java.lang.String">
+		SELECT A.ACCT_ST
+		FROM ACCOUNT_STATUS A
+		WHERE A.ACCT_ST_CD
+		   = (SELECT M.ACCT_ST_CD
+		      FROM MEMBER M
+		      WHERE M.MEM_CD = (SELECT MD.MEM_CD
+		                        FROM MEMBER_DATA MD
+		                        WHERE MD.MEM_ID = #{mem_id}))
+	</select>
+	
+	<select id="Login" resultType="com.leggo.login.MemberLoginDTO">
+		SELECT V.MEM_ID AS MEM_ID, D.MEM_PW AS MEM_PW, V.MEM_NNM AS MEM_NNM
+		     , V.MEM_IMG AS MEM_IMG, V.ACCT_ST AS ACCT_ST, V.ADMIN_CD AS ADMIN_CD
+		FROM MEMBERVIEW V, MEMBER_DATA D
+		WHERE V.MEM_ID = D.MEM_ID
+		  AND D.MEM_ID = #{mem_id}
+		  AND D.MEM_PW = CRYPTPACK.ENCRYPT(#{mem_pw},#{mem_pw})
+	</select>
+	
+	<select id="KakaoLogin" resultType="com.leggo.login.MemberLoginDTO">
+		SELECT V.MEM_ID AS MEM_ID, D.MEM_PW AS MEM_PW, V.MEM_NNM AS MEM_NNM
+		     , V.MEM_IMG AS MEM_IMG, V.ACCT_ST AS ACCT_ST, V.ADMIN_CD AS ADMIN_CD
+		FROM MEMBERVIEW V, MEMBER_DATA D
+		WHERE V.MEM_ID = D.MEM_ID
+		  AND D.MEM_ID = #{kakao_id}
+	</select>
+	
+	<insert id="AutoLoginUpdate">
+		INSERT INTO COOKIETEST(SESSION_ID, LIMIT_TIME, MEM_CD)
+		VALUES(#{session_id}, #{limit_time}, (SELECT MEM_CD FROM MEMBER_DATA WHERE MEM_ID = #{mem_id}))
+	</insert>
+	
+	<select id="AutoLoginCck" resultType="com.leggo.login.MemberAutoLoginDTO">
+		SELECT *
+		FROM COOKIETEST
+		WHERE SESSION_ID = #{session_id}
+	</select>
+	
+	<delete id="AutoLoginDel">
+		DELETE
+		FROM COOKIETEST
+		WHERE SESSION_ID = #{session_id}
+	</delete>
+	
+	<!--
+	<select id="SigninAuthCck" parameterType="com.leggo.login.MemberLoginDTO" resultType="java.lang.String">
+		SELECT SIGNIN_AUTH
+		FROM MEMBER_DATA
+		WHERE MEM_ID = #{mem_id}
+	</select>
+	
+	<update id="SigninAuthUpdate">
+		UPDATE MEMBER_DATA
+		SET SIGNIN_AUTH='완료'
+		WHERE MEM_ID=#{mem_id}
+	</update>
+	 -->
+	 
+	<select id="getMemImg" resultType="java.lang.String">
+		SELECT MEM_IMG
+		FROM MEMBER_DATA
+		WHERE MEM_ID = #{mem_id}
+	</select>
+
+</mapper>

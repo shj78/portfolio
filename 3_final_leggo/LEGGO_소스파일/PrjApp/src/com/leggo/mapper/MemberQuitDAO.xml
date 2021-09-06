@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="com.leggo.mybatis.IMemberQuitDAO">
+
+	<insert id="InsertQuitMember">
+		INSERT INTO QUIT_MEMBER_DATA(QT_MEM_CD, MEM_CD, QT_MEM_ID, QT_MEM_PW, QT_MEM_NNM, QT_MEM_IMG, QT_MEM_INTRO, JOIN_MTD_CD, QT_MEM_JOIN_DT)
+		VALUES('QMD'||QMDSEQUENCE.NEXTVAL
+		       ,(SELECT MEM_CD FROM MEMBER_DATA WHERE MEM_ID = #{mem_id})
+		       ,(SELECT MEM_ID FROM MEMBER_DATA WHERE MEM_ID = #{mem_id})
+		       ,(SELECT MEM_PW FROM MEMBER_DATA WHERE MEM_ID = #{mem_id})
+		       ,(SELECT MEM_NNM FROM MEMBER_DATA WHERE MEM_ID = #{mem_id})
+		       ,(SELECT MEM_IMG FROM MEMBER_DATA WHERE MEM_ID = #{mem_id})
+		       ,(SELECT MEM_INTRO FROM MEMBER_DATA WHERE MEM_ID = #{mem_id})
+		       ,(SELECT JOIN_MTD_CD FROM MEMBER_DATA WHERE MEM_ID = #{mem_id})
+		       ,(SELECT MEM_JOIN_DT FROM MEMBER_DATA WHERE MEM_ID = #{mem_id}))
+	</insert>
+	
+	<delete id="DeleteQuitMember">
+		SELECT * FROM MEMBER_DATA WHERE MEM_ID = #{mem_id}
+	</delete>
+	
+</mapper>

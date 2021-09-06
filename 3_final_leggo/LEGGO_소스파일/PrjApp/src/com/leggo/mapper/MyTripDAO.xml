@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="com.leggo.mytrip.IMyTripDAO">
+
+	<select id="MyTripSelect" resultType="com.leggo.mytrip.MyTripDTO">
+		SELECT TR_CD, TR_TT, TR_THUM_URL, TR_HITS, TR_DT
+		FROM TRIP
+		WHERE MEM_CD = (SELECT MEM_CD FROM MEMBER_DATA WHERE MEM_ID=#{mem_id})
+	</select>
+	
+</mapper>

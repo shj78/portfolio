@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="com.leggo.mybatis.IAdminAnswerDAO">
+
+	<select id="list" resultType="com.leggo.mybatis.AdminAnswerDTO">
+		SELECT MD.MEM_NNM, AA.ADMIN_ANS_CONT, AA.MEM_QST_CD, AA.ADMIN_ANS_DT, AA.ADMIN_ANS_CD
+		FROM 
+		( 
+			SELECT ADMIN_CD, ADMIN_ANS_CONT, MEM_QST_CD, ADMIN_ANS_DT, ADMIN_ANS_CD
+			FROM ADMIN_ANSWER
+			WHERE MEM_QST_CD = #{mem_qst_cd}
+		)AA LEFT JOIN ADMIN A
+		        ON AA.ADMIN_CD = A.ADMIN_CD
+		            LEFT JOIN MEMBER_DATA MD
+		                ON A.MEM_CD = MD.MEM_CD
+	</select>
+	
+	
+	
+</mapper>

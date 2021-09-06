@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="com.leggo.comtrip.IComTripDAO"><!-- implements IComTripDAO -->
+
+	<select id="list" resultType="com.leggo.comtrip.ComTripDTO">
+		SELECT MD.MEM_IMG, MD.MEM_NNM, TR.TR_TT, TR.TR_HITS, TR.TR_THUM_URL, TO_CHAR(TR.TR_DT, 'YYYY-MM-DD'), TR.TR_CONT
+		FROM TRIP TR LEFT JOIN MEMBER_DATA MD
+     	ON TR.MEM_CD = MD.MEM_CD
+	</select>
+
+</mapper>

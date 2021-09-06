@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="com.leggo.mybatis.IJoinQuestionOptionDAO">
+
+	<select id="list" resultType="com.leggo.mybatis.JoinQuestionOptionDTO">
+		SELECT JQO_CD, JOIN_QST_CD, JOIN_QST_NUM, JQO_CONT, TO_NUMBER(SUBSTR(JQO_CD, 4)) AS NUM
+		FROM JOIN_QUESTION_OPTION
+		ORDER BY NUM
+	</select>
+	
+	<select id="answer1" resultType="com.leggo.mybatis.JoinQuestionOptionDTO">
+		SELECT A.JQO_CD, NVL(B.COUNT, 0) AS COUNT, TO_NUMBER(SUBSTR(A.JQO_CD, 4)) AS NUM
+		FROM 
+		(
+			SELECT JQO_CD
+			FROM JOIN_QUESTION_OPTION
+			WHERE JOIN_QST_NUM = 1
+		) A
+		LEFT JOIN ( 
+			SELECT JOIN_ANS_1 AS JQO_CD, COUNT(*) AS COUNT
+			FROM JOIN_ANSWER
+			GROUP BY JOIN_ANS_1
+		) B
+		ON A.JQO_CD = B.JQO_CD
+		ORDER BY NUM
+	</select>
+	
+	<select id="answer2" resultType="com.leggo.mybatis.JoinQuestionOptionDTO">
+		SELECT A.JQO_CD, NVL(B.COUNT, 0) AS COUNT, TO_NUMBER(SUBSTR(A.JQO_CD, 4)) AS NUM
+		FROM 
+		(
+			SELECT JQO_CD
+			FROM JOIN_QUESTION_OPTION
+			WHERE JOIN_QST_NUM = 2
+		) A
+		LEFT JOIN ( 
+			SELECT JOIN_ANS_2 AS JQO_CD, COUNT(*) AS COUNT
+			FROM JOIN_ANSWER
+			GROUP BY JOIN_ANS_2
+		) B
+		ON A.JQO_CD = B.JQO_CD
+		ORDER BY NUM
+	</select>
+	
+	<select id="answer3" resultType="com.leggo.mybatis.JoinQuestionOptionDTO">
+		SELECT A.JQO_CD, NVL(B.COUNT, 0) AS COUNT, TO_NUMBER(SUBSTR(A.JQO_CD, 4)) AS NUM
+		FROM 
+		(
+			SELECT JQO_CD
+			FROM JOIN_QUESTION_OPTION
+			WHERE JOIN_QST_NUM = 3
+		) A
+		LEFT JOIN ( 
+			SELECT JOIN_ANS_3 AS JQO_CD, COUNT(*) AS COUNT
+			FROM JOIN_ANSWER
+			GROUP BY JOIN_ANS_3
+		) B
+		ON A.JQO_CD = B.JQO_CD
+		ORDER BY NUM
+	</select>
+	
+</mapper>

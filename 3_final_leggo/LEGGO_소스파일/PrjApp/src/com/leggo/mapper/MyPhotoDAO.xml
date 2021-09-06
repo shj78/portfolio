@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="com.leggo.myphoto.IMyPhotoDAO">
+
+	<select id="MyPhotoSelect" resultType="com.leggo.myphoto.MyPhotoDTO">
+		SELECT PP.PP_HITS AS PP_HITS, PP.PP_DT AS PP_DT, P.PHT_URL AS PHT_URL
+		FROM PHOTO_POST PP, PHOTO P
+		WHERE PP.MEM_CD = (SELECT MEM_CD FROM MEMBER_DATA WHERE MEM_ID=#{mem_id})
+		      AND PP.PP_CD = P.PP_CD
+	</select>
+	
+</mapper>

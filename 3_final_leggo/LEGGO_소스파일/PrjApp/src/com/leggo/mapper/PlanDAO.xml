@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.leggo.mybatis.IPlanDAO">
+
+	<!-- add()호출 -->
+	<insert id="insertplan"> 
+		INSERT INTO PLAN(PL_CD, MEM_CD, PL_STRT_DT, PL_END_DT
+		, PL_TT, PL_STT, PL_PPL, OPEN_CD)
+		VALUES('PLAN1', 'MEM1', #{PL_STRT_DT}, #{PL_END_DT}
+		, #{PL_TT}, #{PL_STT}, #{PL_PPL}, #{OPEN_CD} )  
+	</insert>
+
+	<insert id="insertaddloc"> 
+		INSERT INTO ADD_LOCATION(LOC_CD, LOC_NM, CITY_CD
+		, LOC_LAT, LOC_LONG
+		, LOC_DESC, LOC_END_TIME)
+		VALUES('ADDLOC1', #{LOC_NM}, #{CITY_CD}
+		, #{LOC_LAT}, #{LOC_LONG}
+		, #{LOC_DESC}, #{LOC_END_TIME});	 
+	</insert>
+	
+	
+	
+</mapper>
+
+

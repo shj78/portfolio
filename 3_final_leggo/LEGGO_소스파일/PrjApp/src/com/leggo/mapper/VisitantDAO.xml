@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="com.leggo.mybatis.IVisitantDAO">
+
+	<select id="list" resultType="com.leggo.mybatis.VisitantDTO">
+		SELECT VI_DT,  VI_IP
+		FROM VISITANT
+		ORDER BY VI_DT DESC
+	</select>
+	
+	<select id="totCount" resultType="java.lang.Integer">
+		SELECT COUNT(*) AS COUNT
+		FROM VISITANT
+	</select>
+	
+	<select id="dayList" resultType="com.leggo.mybatis.VisitantDTO">
+		SELECT A.DAY AS VI_DT, NVL(B.COUNT, 0) AS COUNT
+		FROM 
+		(
+			SELECT TO_CHAR(SYSDATE-LEVEL+1, 'YYYY-MM-DD') DAY
+			FROM DUAL
+			CONNECT BY LEVEL BETWEEN 1 AND 6
+		) A,
+		(
+			SELECT TO_CHAR(VI_DT, 'YYYY-MM-DD') AS DAY, COUNT(*) AS COUNT
+			FROM VISITANT
+			WHERE TO_CHAR(VI_DT, 'YYYY-MM-DD') BETWEEN TO_CHAR(SYSDATE-5, 'YYYY-MM-DD') AND TO_CHAR(SYSDATE, 'YYYY-MM-DD')
+			GROUP BY TO_CHAR(VI_DT, 'YYYY-MM-DD')
+		) B
+		WHERE A.DAY = B.DAY(+)
+		ORDER BY A.DAY
+	</select>
+	
+	<select id="timeList" resultType="com.leggo.mybatis.VisitantDTO">
+		SELECT A.DAY AS VI_DT, NVL(B.COUNT, 0) AS COUNT
+		FROM 
+		(
+			SELECT TO_CHAR(SYSDATE+(-LEVEL+1)/24, 'YYYY-MM-DD HH24') DAY
+			FROM DUAL
+			CONNECT BY LEVEL BETWEEN 1 AND 7
+		) A,
+		(
+			SELECT TO_CHAR(VI_DT, 'YYYY-MM-DD HH24') AS DAY, COUNT(*) AS COUNT
+			FROM VISITANT
+			WHERE TO_CHAR(VI_DT, 'YYYY-MM-DD HH24') BETWEEN TO_CHAR(SYSDATE-6/24, 'YYYY-MM-DD HH24') AND TO_CHAR(SYSDATE, 'YYYY-MM-DD HH24')
+			GROUP BY TO_CHAR(VI_DT, 'YYYY-MM-DD HH24')
+		) B
+		WHERE A.DAY = B.DAY(+)
+		ORDER BY A.DAY
+	</select>
+	
+	<insert id="add">
+		INSERT INTO VISITANT(VI_CD, VI_IP)
+		VALUES('VI' || VISITANTSEQ.NEXTVAL, #{vi_ip})
+	</insert>
+	
+</mapper>

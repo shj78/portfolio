@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="com.leggo.mybatis.IPhotoDAO">
+
+	<select id="list" resultType="com.leggo.mybatis.PhotoDTO">
+		SELECT PP_CD, MEM_NNM, TO_CHAR(PP_DT, 'YYYY-MM-DD') AS PP_DT, PP_HITS, RPT_ST_CONT, PP_DT AS DT
+		FROM PHOTOPOSTVIEW
+		ORDER BY DT DESC
+	</select>
+	
+	<select id="count" resultType="java.lang.Integer">
+		SELECT COUNT(*) AS COUNT
+		FROM PHOTOPOSTVIEW
+	</select>
+	
+	<select id="photoPost" resultType="com.leggo.mybatis.PhotoDTO">
+		SELECT MEM_NNM, PP_DT, BLIND, OPEN_ST
+		FROM
+		(
+		SELECT MEM_NNM, TO_CHAR(PP_DT, 'YYYY-MM-DD') AS PP_DT, PP_DT AS DT, OPEN_ST , CASE WHEN  RPT_ST_CONT IN('완료', '미완료', '처리중') THEN '블라인드'
+		                                                                              ELSE '정상'
+		                                                                              END BLIND
+		FROM PHOTOPOSTVIEW
+		WHERE PP_CD = #{pp_cd}
+		ORDER BY DT DESC
+		)
+		WHERE ROWNUM = 1
+	</select>
+	
+	<select id="rptCount" resultType="java.lang.Integer">
+		SELECT COUNT(*) AS COUNT
+		FROM PHOTO_POST_REPORT
+		WHERE PP_CD = #{pp_cd}
+	</select>
+	
+	<select id="rptList" resultType="com.leggo.mybatis.PhotoDTO">
+		SELECT TO_CHAR(PPR.PPR_DT, 'YYYY-MM-DD') AS DT, RS.RPT_ST_CONT , MD.MEM_NNM, PPR.PPR_DT, PPR.PPR_CD
+		FROM PHOTO_POST_REPORT PPR LEFT JOIN REPORT_STATUS RS
+		        ON PPR.RPT_ST_CD = RS.RPT_ST_CD
+		            LEFT JOIN ADMIN A
+		                ON PPR.ADMIN_CD = A.ADMIN_CD
+		                    LEFT JOIN MEMBER_DATA MD
+		                        ON A.MEM_CD = MD.MEM_CD
+		WHERE PP_CD = #{pp_cd}
+		ORDER BY PPR.PPR_DT DESC
+	</select>
+	
+</mapper>

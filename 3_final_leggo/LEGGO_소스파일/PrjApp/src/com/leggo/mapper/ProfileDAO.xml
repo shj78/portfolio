@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="com.leggo.profile.IProfileDAO">
+
+	<select id="ProfileSelect" resultType="com.leggo.profile.ProfileDTO">
+		SELECT MEM_IMG AS MEM_IMG, MEM_NNM AS MEM_NNM,
+		    (SELECT COUNT(*)
+		     FROM FOLLOW F
+		     WHERE F.MEM_ING_CD= D.MEM_CD) AS FOL_ING_CNT,
+		    (SELECT COUNT(*)
+		     FROM FOLLOW F
+		     WHERE F.MEM_ED_CD= D.MEM_CD) AS FOL_ED_CNT,
+		     NVL(D.MEM_INTRO,'자기소개가 없습니다.') AS MEM_INTRO
+		FROM MEMBER_DATA D
+		WHERE D.MEM_ID = #{mem_id}
+	</select>
+	
+	<select id="ProfileSetting" resultType="com.leggo.profile.ProfileDTO">
+		SELECT MEM_IMG, MEM_NNM, MEM_INTRO
+		FROM MEMBER_DATA
+		WHERE MEM_ID = #{mem_id}
+	</select>
+	<!-- 
+	<update id="ProfileSettingImg">
+		UPDATE MEMBER_DATA
+		SET MEM_IMG = #{mem_img}
+		WHERE MEM_ID = #{mem_id}
+	</update>
+	 -->
+	<update id="ProfileSettingNnm">
+		UPDATE MEMBER_DATA
+		SET MEM_NNM = #{mem_nnm}
+		WHERE MEM_ID = #{mem_id}
+	</update>
+	
+	<select id="MemNnmCck" resultType="java.lang.Integer">
+		SELECT COUNT(*) AS COUNT
+		FROM MEMBER_DATA
+		WHERE MEM_NNM = #{mem_nnm} AND MEM_ID != #{mem_id}
+	</select>
+	
+	<update id="ProfileSettingIntro">
+		UPDATE MEMBER_DATA
+		SET MEM_INTRO = #{mem_intro}
+		WHERE MEM_ID = #{mem_id}
+	</update>
+	
+</mapper>

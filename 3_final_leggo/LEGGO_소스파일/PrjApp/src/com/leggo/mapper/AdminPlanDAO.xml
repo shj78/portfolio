@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="com.leggo.mybatis.IPlanDAO">
+
+	<select id="list" resultType="com.leggo.mybatis.PlanDTO">
+		SELECT PL_CD, MEM_NNM, PL_TT,  TO_CHAR(PL_DT, 'YYYY-MM-DD') AS DT, PL_DT, PL_HITS, RPT_ST_CONT, CASE WHEN  RPT_ST_CONT IN('완료', '미완료', '처리중') THEN '블라인드'
+                                                                                     ELSE '정상'
+                                                                                     END BLIND
+		FROM PLANVIEW
+		ORDER BY PL_DT DESC
+	</select>
+	
+	<select id="count" resultType="java.lang.Integer">
+		SELECT COUNT(*) AS COUNT
+		FROM PLANVIEW
+	</select>
+	
+	<select id="planPost" resultType="com.leggo.mybatis.PlanDTO">
+		SELECT PL_TT, MEM_NNM, PL_DT, BLIND, OPEN_ST
+		FROM
+		(
+			SELECT MEM_NNM, PL_TT,  TO_CHAR(PL_DT, 'YYYY-MM-DD') AS PL_DT, PL_DT AS DT, OPEN_ST , CASE WHEN  RPT_ST_CONT IN('완료', '미완료', '처리중') THEN '블라인드'
+			                                                                                      ELSE '정상'
+			                                                                                      END BLIND
+			FROM PLANVIEW
+			WHERE PL_CD = #{pl_cd}
+			ORDER BY DT DESC
+		)
+		WHERE ROWNUM = 1
+	</select>
+	
+	<select id="rptList" resultType="com.leggo.mybatis.PlanDTO">
+		SELECT TO_CHAR(PR.PL_RPT_DT, 'YYYY-MM-DD') AS DT, RS.RPT_ST_CONT , MD.MEM_NNM, PR.PL_RPT_DT, PR.PL_RPT_CD
+		FROM PLAN_REPORT PR LEFT JOIN REPORT_STATUS RS
+		        ON PR.RPT_ST_CD = RS.RPT_ST_CD
+		            LEFT JOIN ADMIN A
+		                ON PR.ADMIN_CD = A.ADMIN_CD
+		                    LEFT JOIN MEMBER_DATA MD
+		                        ON A.MEM_CD = MD.MEM_CD
+		WHERE PL_CD = #{pl_cd}
+		ORDER BY PR.PL_RPT_DT DESC
+	</select>
+	
+	<select id="rptCount" resultType="java.lang.Integer">
+		SELECT COUNT(*) COUNT
+		FROM PLAN_REPORT 
+		WHERE PL_CD = #{pl_cd}
+	</select>
+	
+</mapper>
