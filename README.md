@@ -22,7 +22,7 @@
 >기술 스택:  
 >Java 8 
 >  
->[프로젝트 상세 설명](https://github.com/shj78/portfolio/tree/master/1_java_kiosk_console) 참고
+>[프로젝트 자료 참고](https://github.com/shj78/portfolio/tree/master/1_java_kiosk_console) 참고
 
 ---
 
@@ -33,7 +33,7 @@
 >기술 스택:  
 >Oracle 
 >  
->[프로젝트 상세 설명](https://github.com/shj78/portfolio/tree/master/2_oracle_db) 참고
+>[프로젝트 자료 참고](https://github.com/shj78/portfolio/tree/master/2_oracle_db) 참고
 
 ---
 
@@ -44,7 +44,7 @@
 >기술 스택:  
 >Java 8 / Oracle / Spring / HTML / CSS / Javascript / myBatis 
 >  
->[프로젝트 상세 설명](https://github.com/shj78/portfolio/tree/master/3_final_leggo) 참고
+>[프로젝트 자료 참고](https://github.com/shj78/portfolio/tree/master/3_final_leggo) 참고
 
 ---
 
@@ -55,4 +55,4 @@
 >기술 스택:  
 >Java 8 / Oracle / Spring / HTML / CSS / Javascript / myBatis 
 >  
->[프로젝트 상세 설명](https://github.com/shj78/portfolio/tree/master/4_solo_zago/plan) 참고
+>[프로젝트 자료 참고](https://github.com/shj78/portfolio/tree/master/4_solo_zago/plan) 참고
