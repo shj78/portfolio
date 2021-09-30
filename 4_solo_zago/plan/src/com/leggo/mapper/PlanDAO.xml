@@ -9,21 +9,27 @@
 
 	<!-- add()호출 -->
 	<!-- 몇행을 인서트 타입 = resulType -->
-	<insert id="insertplan" parameterType="com.leggo.plan.PlanDTO"> 
+	<insert id="insertplan" parameterType="com.leggo.plan.PlanDTO">
+		<selectKey resultType="Long" keyProperty="PL_CD" order="BEFORE">
+	        SELECT PLANSEQ.NEXTVAL FROM DUAL
+	    </selectKey> 
 		INSERT INTO PLAN(PL_CD, MEM_CD, PL_STRT_DT, PL_END_DT
 		, PL_TT, PL_STT, PL_PPL, OPEN_CD)
-		VALUES('PLAN1', 'MEM1', #{PL_STRT_DT, jdbcType=DATE}, #{PL_END_DT, jdbcType=DATE}
+		VALUES(#{PL_CD, jdbcType=NUMERIC}, #{MEM_CD, jdbcType=NUMERIC}, #{PL_STRT_DT, jdbcType=DATE}, #{PL_END_DT, jdbcType=DATE}
 		, #{PL_TT, jdbcType=VARCHAR}, #{PL_STT, jdbcType=VARCHAR}, #{PL_PPL, jdbcType=NUMERIC}, #{OPEN_CD, jdbcType=NUMERIC} )  
 	</insert>
 	
- 	<insert id="insertaddloc" parameterType="com.leggo.plan.PlanADTO"> 
+ 	<insert id="insertaddloc" parameterType="com.leggo.plan.PlanADTO">
+ 		<selectKey resultType="Long" keyProperty="LOC_CD" order="BEFORE">
+	        SELECT LOCSEQ.NEXTVAL FROM DUAL
+	    </selectKey>
 		INSERT INTO ADD_LOCATION
 		(LOC_CD, PL_CD
 		, LOC_NM
 		, CITY_CD	 
 		, LOC_LAT, LOC_LONG
 		, LOC_DESC, LOC_STRT_TIME) 
-		VALUES('ADD_LOC1', 'PLAN1'
+		VALUES(#{LOC_CD}, #{PL_CD}
 		, #{LOC_NM}
 		, 'CITY7'
 		, #{LOC_LAT}, #{LOC_LONG}

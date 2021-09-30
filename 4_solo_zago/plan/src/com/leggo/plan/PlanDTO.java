@@ -3,9 +3,14 @@ package com.leggo.plan;
 public class PlanDTO
 {													//★★ PL_CD, MEM_CD,일정 코드, 회원 코드
 	//일정 테이블 
-	private String PL_TT, PL_STT 					//일정 제목, 일정 소제목
-			, PL_STRT_DT, PL_END_DT					//일정 시작일, 일정 종료일
-			, PL_PPL, OPEN_CD;						//일정 작성일(Default라 뺌), 일정 예상 인원, 일정 공개 여부
+	private Long PL_CD;
+	private String PL_TT;		// 일정 제목
+	private String PL_STT;		// 일정 소제목
+	private String PL_STRT_DT;	// 일정 시작일
+	private String PL_END_DT;	// 일정 종료일
+	private String PL_PPL;		// 일정 작성일(Default라 뺌), 일정 예상 인원, 일정 공개 여부
+	private String OPEN_CD;
+	private Long MEM_CD;
 	 
 	//PL_IMG 아직 구현안됐음 , 일정 대표이미지, PL_IMG
 
@@ -67,6 +72,26 @@ public class PlanDTO
 	public void setOPEN_CD(String oPEN_CD)
 	{
 		OPEN_CD = oPEN_CD;
+	}
+
+	public Long getPL_CD()
+	{
+		return PL_CD;
+	}
+
+	public void setPL_CD(Long pL_CD)
+	{
+		PL_CD = pL_CD;
+	}
+
+	public Long getMEM_CD()
+	{
+		return MEM_CD;
+	}
+
+	public void setMEM_CD(Long mEM_CD)
+	{
+		MEM_CD = mEM_CD;
 	}
 
 	

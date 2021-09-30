@@ -6,6 +6,8 @@
 package com.leggo.plan;
 
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.ibatis.session.SqlSession;
@@ -28,7 +30,7 @@ public class PlanMain
 	public String loginpage(ModelMap model, HttpServletRequest request)
 	{
 
-		String result = "WEB-INF/views/login.jsp";
+		String result = "WEB-INF/views/Login.jsp";
 		return result;
 
 	}
@@ -37,7 +39,7 @@ public class PlanMain
 	public String joinpage(ModelMap model, HttpServletRequest request)
 	{
 
-		String result = "WEB-INF/views/join.jsp";
+		String result = "WEB-INF/views/Join.jsp";
 		return result;
 
 	}
@@ -68,7 +70,7 @@ public class PlanMain
 		String keyword = request.getParameter("keyword");
 		model.addAttribute("keyword", keyword);
 
-		String result = "WEB-INF/views/ZPlan.jsp";
+		String result = "WEB-INF/views/UserPlan.jsp";
 		
 		return result;
 
@@ -88,9 +90,7 @@ public class PlanMain
 	
 	
 	@RequestMapping(value = "insertplan.action", method = {RequestMethod.GET, RequestMethod.POST})
-	 public String insertplan(PlanDTO p,
-	 String[] LOC_NM, String[] CITY_CD, String[]
-	LOC_LAT, String[] LOC_LONG, String[] LOC_DESC, String[] LOC_STRT_TIME)
+	 public String insertplan(PlanDTO plan, List<PlanADTO> locationList)
 	{
 		
 		
@@ -102,9 +102,12 @@ public class PlanMain
 		
 		try {
 			//일정 테이블에 인서트됨
-			dao.insertplan(p);
+			dao.insertplan(plan);
 			
-			
+			for (PlanADTO planA : locationList) {
+				planA.setPL_CD(plan.getPL_CD());
+				dao.insertaddloc(planA);
+			}
 			
 		}
 		catch(Exception ex) {
@@ -117,8 +120,7 @@ public class PlanMain
 	}
 
 	@RequestMapping(value = "insertaddlocation.action", method = {RequestMethod.GET, RequestMethod.POST})
-	 public String insertplan(String[] LOC_NM, String[] CITY_CD, String[] LOC_LAT
-	, String[] LOC_LONG, String[] LOC_DESC, String[] LOC_STRT_TIME)
+	 public String insertplan(List<PlanADTO> locationList)
 	{
 		
 		String result = "WEB-INF/views/StartPlan.jsp";
@@ -128,6 +130,11 @@ public class PlanMain
 		
 		try {
 			
+			for (PlanADTO planA : locationList) {
+				dao.insertaddloc(planA);
+			}
+			
+			/*
 			int n = LOC_NM.length;
 			
 			System.out.println("n: "+n);
@@ -166,7 +173,7 @@ public class PlanMain
 
 				
 			}
-			
+			*/
 			
 			
 
