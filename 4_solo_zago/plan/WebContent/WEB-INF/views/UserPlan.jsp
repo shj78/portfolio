@@ -76,9 +76,7 @@
 								<!-- <a href="">FAQ</a> -->
 							</li>
 						</ul>
-					</div>
-					
-
+					</div>		
 					
 					<div class="account_category">
 						<ul class="navbar">
@@ -258,7 +256,7 @@
 							<div class="modal-footer">
 								<button type="button" class="btn btn-secondary"
 									data-dismiss="modal" style="outline: none !important;">취소</button>
-								<button type="submit" class="btn btn-primary"
+								<button type="button" class="btn btn-primary"
 									onclick="savePlan()" style="outline: none !important;">저장</button>
 							</div>
 						</div>
@@ -1400,7 +1398,7 @@
 			
 			$.ajax({
 			    method      : 'POST',
-			    url         : 'insertaddlocation.action',
+			    url         : 'insertplan.action',
 			    traditional : true,
 			    data        : {
 			    	'LOC_NM' : LocNmArr,
@@ -1411,7 +1409,8 @@
 					'LOC_STRT_TIME' : tStartArr
 			    },
 			    success     : function(data) {
-			        alert("성공! "+data);        
+			        alert("성공! "+data); 
+			        document.location.href = ""
 			    },
 			    error       : function(request, status, error) {
 			        alert(error);

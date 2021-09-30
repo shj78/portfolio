@@ -205,7 +205,7 @@ header {
 		<header>
 
 			<div class = "b_text">
-			<a href="/WebContent/main.action">
+			<a href="/">
 				<img src="images/logo_zago.png" style="height:90px !important; text-align: center;" alt="Za, GO." />
 			</a>
 			</div>

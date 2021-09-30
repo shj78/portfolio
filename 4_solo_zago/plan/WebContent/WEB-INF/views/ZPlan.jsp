@@ -26,6 +26,8 @@
 <link rel="stylesheet" href="assets/css/shj/bootstrap-theme.css" />
 <link rel="stylesheet" href="assets/css/shj/bootstrap-theme.css.map" />
 
+
+
 <!-- 부트스트랩 아이콘 -->
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"
@@ -67,7 +69,7 @@
 		<header>
 
 			<div class = "nav_container b_text">
-			<a href="/">
+			<a href="/writeplan.action">
 				<img src="images/logo_zago.png" style="height:70px !important" alt="Za, GO." />
 			</a>
 				<div class="hor_category l_text">
