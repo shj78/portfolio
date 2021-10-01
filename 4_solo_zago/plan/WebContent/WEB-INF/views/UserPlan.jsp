@@ -1338,6 +1338,19 @@
 		      console.log(i+" 번째 공개여부: "+bOpenArr[i]);
 		      console.log("공개여부 확인 종료");
 		    } */
+		    
+		    
+		    
+		    
+		    //일정 테이블 변수 시작----------------------------------------
+		    var pl_cd=$("input[name='PL_CD']").val();
+		    var pl_tt=$("input[name='PL_TT']").val();
+		    var pl_stt=$("input[name='PL_STT']").val();
+		    var pl_strt_dt=$("input[name='PL_STRT_DT']").val();
+		    var pl_end_dt=$("input[name='PL_END_DT']").val();
+		    var pl_ppl=$("input[name='PL_PPL']").val();
+		    var open_cd=$("input[name='OPEN_CD']").val();
+		    //일정 테이블 변수 끝----------------------------------------
 		    console.log("공개여부 확인 시작");
 		    var bOpen = $("input[name='OPEN_CD']:checked").val();
 		    console.log("공개여부 확인 종료"+bOpen);
@@ -1401,6 +1414,13 @@
 			    url         : 'insertplan.action',
 			    traditional : true,
 			    data        : {
+			    	'PL_CD':pl_cd,
+			    	'PL_TT':pl_tt,
+			    	'PL_STT':pl_stt,
+			    	'PL_STRT_DT':pl_strt_dt,
+			    	'PL_END_DT':pl_end_dt,
+			    	'PL_PPL':pl_ppl,
+			    	'OPEN_CD':open_cd,
 			    	'LOC_NM' : LocNmArr,
 					'CITY_CD' : cCityArr,
 					'LOC_LAT' : LatArr,
