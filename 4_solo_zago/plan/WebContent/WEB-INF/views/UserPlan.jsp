@@ -337,7 +337,7 @@
 	var dots = {}; // 선이 그려지고 있을때 클릭할 때마다 클릭 지점과 거리를 표시하는 커스텀 오버레이 배열입니다.
 	var positions = [];
     var linePath;
-    var lineLine = new daum.maps.Polyline();
+    var lineLine;
     var distance;
     
 	//-----------------------------------ajax 데이터 넘기기 배열
@@ -684,6 +684,9 @@
 			return false;
 		}
 
+		removeMarker();
+		// removePlace();
+		
 		//검색 값이 null 이 아닐 경우 return false 영향 받지 않고,
 		// 장소검색 객체(ps)를 통해 키워드로 장소검색을 요청합니다
 		// ps 객체가 소유하고 있는 메소드 keywordSearch(검색 값, 함수명) 
@@ -963,7 +966,7 @@
 		//alert("arrDt[1]: "+arrDt[1]);
 		//alert("arrDt[2]: "+arrDt[2]);
 		
-		var ymd = arrDt[0]+":"+arrDt[1]+":"+arrDt[2]+":";
+		var ymd = arrDt[0]+"-"+arrDt[1]+"-"+arrDt[2];
 		
 		var hdnName = $("#hdnName").attr('value');
 		//장소의 도시명과 장소 이름
@@ -980,7 +983,7 @@
 		
 		
 
-		$('#sortable div[data-date="'+selDate+'"]').append('<div data-index-number="'+markIdx+'" class="container-fluid" ><div class="row"'+' value="'+hdnName+'"'+'><div class="addPlace col-xs-3 col-sm-3 col-md-3" style="letter-spacing: 1px;">'+hdnName+"<br><input name = 'LOC_STRT_TIME' type='time' min='' max='' class='"+ymd+"'>"+'</div><div class="col-xs-8 col-sm-8 col-md-8"><textarea id="LOC_DESC" name="LOC_DESC" rows="4" cols="90" value=""></textarea></div ><div class="fa fa-window-close col-xs-1 col-sm-1 col-md-1" aria-hidden="true" style="display:inline-block; border:none;" onclick="removePlace('+markIdx+')"></div></div></div>');
+		$('#sortable div[data-date="'+selDate+'"]').append('<div data-index-number="'+markIdx+'" class="container-fluid" ><div class="row"'+' value="'+hdnName+'"'+'><div class="addPlace col-xs-3 col-sm-3 col-md-3" style="letter-spacing: 1px;">'+hdnName+"<br><input name = 'LOC_STRT_TIME' type='time' min='' max='' data-ymd='" + ymd + "' class='"+ymd+"'>"+'</div><div class="col-xs-8 col-sm-8 col-md-8"><textarea name="LOC_DESC" rows="4" style="width: 100%" value=""></textarea></div ><div class="fa fa-window-close col-xs-1 col-sm-1 col-md-1" aria-hidden="true" style="display:inline-block; border:none;" onclick="removePlace('+markIdx+')"></div></div></div>');
 		$('#sortable div[data-date="'+selDate+'"]').append('<div name="LOC_LAT" value="'+arrLL[0]+'"><div name="LOC_LONG" value="'+arrLL[1]+'"></div></div>');
 		$('#sortable div[data-date="'+selDate+'"]').append('<div name="CITY_CD" value="'+arrCN[0]+'"><div name="LOC_NM" value="'+arrCN[1]+'"></div></div>');
 
@@ -993,33 +996,32 @@
 				latlng :  new daum.maps.LatLng(arrLL[0],arrLL[1])
 		};
 		
+		//------------------------------------------------------------------------------
+		var linePathForAdding = [];
 		for (var i = 0; i < positions.length; i++) {
-	        if (i != 0) {
-	            linePath = [ positions[i - 1].latlng, positions[i].latlng ] //라인을 그리려면 두 점이 있어야하니깐 두 점을 지정했습니다
-	        }
-	        ;
-	        lineLine.setPath(linePath); // 선을 그릴 라인을 세팅합니다
+			linePathForAdding.push(positions[i].latlng);
 	 
-	        var drawLine = new daum.maps.Polyline({
+	        // distance = Math.round(lineLine.getLength());
+	        displayCircleDot(positions[i].latlng, 0);
+	    }
+		
+		if (!lineLine) {
+        	lineLine = new daum.maps.Polyline({
 	            map : map, // 선을 표시할 지도입니다 
-	            path : linePath,
+	            path : linePathForAdding,
 	            strokeWeight : 3, // 선의 두께입니다 
 	            strokeColor : '#db4040', // 선의 색깔입니다
 	            strokeOpacity : 1, // 선의 불투명도입니다 0에서 1 사이값이며 0에 가까울수록 투명합니다
 	            strokeStyle : 'solid' // 선의 스타일입니다
 	        });
-	 
-	        distance = Math.round(lineLine.getLength());
-	        displayCircleDot(positions[i].latlng, distance);
-	         
-	    }
+        } else {
+        	lineLine.setPath(linePathForAdding);
+        }
 			
 		//DB 작업용 추가된 장소 name화 시작------------------------------------------------------------------------------
 		
 		//장소가 추가되었다면 - 이거 사실 안해줘도 되지 않나?
-		if( locLng > 0 )
-		{
-			
+		if (locLng > 0) {
 			//명예 변수 시퀀스 추가된 장소코드 총 8개
 		
 			//전역으로 설정하면 중복값이 계속해서 들어가므로 지역설정해서 계속 리프레쉬되도록 해야함
@@ -1121,6 +1123,7 @@
 		      console.log(i+" 번째 도착시간: "+tStartArr[i]);
 		      console.log("도착시간끝");
 		    }
+		    
 			/*
 		    console.log("공개여부 확인 시작");
 		    var bOpenArr = $("input[name='OPEN_CD']:checked").val();
@@ -1212,241 +1215,183 @@
 	
 	
 	function savePlan(){
-		
+	
 		//DB 작업용 추가된 장소 name화 시작------------------------------------------------------------------------------
 		alert("savePlan입성");
 		//장소가 추가되었다면 - 이거 사실 안해줘도 되지 않나?
-		if( locLng > 0 )
-		{
-			
-			//명예 변수 시퀀스 추가된 장소코드 총 8개
 		
-			//전역으로 설정하면 중복값이 계속해서 들어가므로 지역설정해서 계속 리프레쉬되도록 해야함
-			var LocNmArr = []; //두번 선언되어 있었음
-		    $("div[name='LOC_NM']").each(function(i) {
-		    	//LocNmArr.push($(this).val());
-		    	//해당 div의 value 속성 값을 LocNmArr에 추가
-		    	LocNmArr.push($(this).attr('value'));
-		    });
-		    
-		    console.log("장소명시작");
-		    for (var i in LocNmArr)
-		    {
-		      console.log(i+" 번째 장소명: "+LocNmArr[i]);
-		      console.log("장소명끝");
-		    }
-		    
-		    //console.log(LocNmArr);
-					
-		    //마이바티스 측에서 도시명으로 INSERT되고 SQL쪽에서는 도시명을 도시코드로 바꿔야함
-			var cCityArr = [];
-		    $("div[name='CITY_CD']").each(function(i, item) {
-		    	//cCityArr.push($(this).val());
-		    	//cCityArr.push($(item).val());
-		    	cCityArr.push($(this).attr('value'));
-		    });
-		    
-		    console.log("도시명시작");
-		    for (var i in cCityArr)
-		    {
-		      console.log(i+" 번째 도시명: "+cCityArr[i]);
-		      console.log("도시명끝");
-		    }		    
-		    
-		    //console.log(cCityArr);
-		    
-			var LatArr = [];
-			
-		    $("div[name='LOC_LAT']").each(function(i) {
-		    	//LatArr.push($(this).val());
-		    	LatArr.push($(this).attr('value'));
-		    });
-		    
-		    console.log("경도시작");
-		    for (var i in LatArr)
-		    {
-		      console.log(i+" 번째 경도: "+LatArr[i]);
-		      console.log("경도끝");
-		    }		    
-		    
-		    
-			var LngArr = [];
-			
-		    $("div[name='LOC_LONG']").each(function(i) {
-		    	//LngArr.push($(this).val());
-		    	LngArr.push($(this).attr('value'));
-		    });
-		    
-		    console.log("위도시작");
-		    for (var i in LngArr)
-		    {
-		      console.log(i+" 번째 위도: "+LngArr[i]);
-		      console.log("위도끝");
-		    }
-		    
-			var LocDesArr = [];
-			
-		    $("textarea[name='LOC_DESC']").each(function(i, item) {
-		    	//LocDes.push($(this).val());
-		    	//LocDesArr.push($(this).value);
-		    	//LocDesArr.push($(this).text());
-		    	LocDesArr.push($(item).val());
-		    });
-		    
-		    console.log("장소설명시작");
-		    for (var i in LocDesArr)
-		    {
-		      console.log(i+" 번째 장소설명: "+LocDesArr[i]);
-		      console.log("장소설명끝");
-		    }
-		    
-		    //console.log(LocDesArr);
-		    
-		    //뺄게요
-			//var tLocStrt = [];
-	
-			var tStartArr = [];
-		    $("input[name='LOC_STRT_TIME']").each(function(i, item) {
-		    	//tStartArr.push($(this).val());
-		    	//tStartArr.push($(this).value);
-		    	//tStartArr.push($(this).html());
-		    	tStartArr.push($(item).val());
-		    	
-		    	
-		    });	
-		    console.log("도착시간시작");
-		    for (var i in tStartArr)
-		    {
-		      console.log(i+" 번째 도착시간: "+tStartArr[i]);
-		      console.log("도착시간끝");
-		    }
-		    
-			
-		
-		
-		//DB 작업용 추가된 장소 name화 종료------------------------------------------------------------------------------
-		    
-/* 			var bOpenArr = [];
-		    $("input[name='OPEN_CD']:checked").each(function(i, item) {
-
-		    	bOpenArr.push($(item).val());
-		    	
-		    });	
-		    console.log("공개여부 확인 시작");
-		    for (var i in bOpenArr)
-		    {
-		      console.log(i+" 번째 공개여부: "+bOpenArr[i]);
-		      console.log("공개여부 확인 종료");
-		    } */
-		    
-		    
-		    
-		    
-		    //일정 테이블 변수 시작----------------------------------------
-		    var pl_cd=$("input[name='PL_CD']").val();
-		    var pl_tt=$("input[name='PL_TT']").val();
-		    var pl_stt=$("input[name='PL_STT']").val();
-		    var pl_strt_dt=$("input[name='PL_STRT_DT']").val();
-		    var pl_end_dt=$("input[name='PL_END_DT']").val();
-		    var pl_ppl=$("input[name='PL_PPL']").val();
-		    var open_cd=$("input[name='OPEN_CD']").val();
-		    //일정 테이블 변수 끝----------------------------------------
-		    console.log("공개여부 확인 시작");
-		    var bOpen = $("input[name='OPEN_CD']:checked").val();
-		    console.log("공개여부 확인 종료"+bOpen);
-		    
-		    console.log("인원 확인 시작");
-			var nHum = $("input[name='PL_PPL']").val();
-			console.log("인원 확인 종료"+nHum);
-		    
-		    var sdate = $("input[name='PL_STRT_DT']").val();
-		    console.log("여행시작일: "+sdate);
-		    
-		    var edate = $("input[name='PL_END_DT']").val();
-		    console.log("여행종료일: "+edate);
-		    
-		    var pTT = $("input[name='PL_TT']").val();
-		    console.log("여행대제목: "+pTT);
-		    
-		    var pSTT = $("input[name='PL_STT']").val();
-		    console.log("여행소제목: "+pSTT);	
-		    
-			//-----------------------------------컨트롤러로 배열 값 넘기기 시작
-			
-			//data에는 하나만 넣을 수 있는 건가?
-			//일단 해본다.
-			
-			alert("ajax 입성 ");
-
+		var locationList = [];
+		if (locLng > 0) {
 			/*
-			consolg.log(LocNmArr);
-			consolg.log(cCityArr);
-			consolg.log(LatArr);
-			consolg.log(LngArr);
-			consolg.log(LocDesArr);
-			consolg.log(tStartArr);
-			*/
-			/*
-			$.ajax({
-				url				: 'insertplan.action',
-				method			: 'POST',
-				//async:false,
-				tranditional	: true,
-				//dataType : 'json',
-				//contentType : "application/x-www-form-urlencoded; charset=UTF-8;",
-				data			: allData,
-				success			: function(data){
-					alert("성공");
-				},
-				error			: function(request, status, error){
-					
-					alert("에러 발생~~ \n" + textStatus + " : " + errorThrown);
-					alert("실패");
-				}
+			 * input 태그가 아닐때 태그에 값을 넣어줄땐 data attribute를 사용한다.
+			 * jquery에서 아래와 같이 조회 가능하다.
+			 * '<div data-loc-nm="vale"></div>';
+			 * $().data('locNm')
+			 */
+			var $locNmArr = $("div[name='LOC_NM']");
+			var $cityCdArr = $("div[name='CITY_CD']");
+			var $locLatArr = $("div[name='LOC_LAT']");
+			var $locLongArr = $("div[name='LOC_LONG']");
+			var $locDescArr = $("textarea[name='LOC_DESC']");
+			var $locStrtTimeArr = $("input[name='LOC_STRT_TIME']");
+			
+			for (var idx = 0; idx < locLng; idx++) {			
+				var LOC_NM = $($locNmArr[idx]).attr('value');
+				var CITY_CD = $($cityCdArr[idx]).attr('value');
+				var LOC_LAT = $($locLatArr[idx]).attr('value');
+				var LOC_LONG = $($locLongArr[idx]).attr('value');
+				var LOC_DESC = $($locDescArr[idx]).val();
 				
-			});
-		
-			*/
-			
-			
-			$.ajax({
-			    method      : 'POST',
-			    url         : 'insertplan.action',
-			    traditional : true,
-			    data        : {
-			    	'PL_CD':pl_cd,
-			    	'PL_TT':pl_tt,
-			    	'PL_STT':pl_stt,
-			    	'PL_STRT_DT':pl_strt_dt,
-			    	'PL_END_DT':pl_end_dt,
-			    	'PL_PPL':pl_ppl,
-			    	'OPEN_CD':open_cd,
-			    	'LOC_NM' : LocNmArr,
-					'CITY_CD' : cCityArr,
-					'LOC_LAT' : LatArr,
-					'LOC_LONG' : LngArr,
-					'LOC_DESC' : LocDesArr,
-					'LOC_STRT_TIME' : tStartArr
-			    },
-			    success     : function(data) {
-			        alert("성공! "+data); 
-			        document.location.href = ""
-			    },
-			    error       : function(request, status, error) {
-			        alert(error);
-			    }
-			 
-			});
-			
-
-
-			//-----------------------------------컨트롤러로 배열 값 넘기기 종료
+				var $locStrtTime = $($locStrtTimeArr[idx]);
+				var ymd = $locStrtTime.data('ymd');
+				var LOC_STRT_TIME = ymd + ' ' + $locStrtTime.val();
+				
+				locationList.push({
+					// LOC_NM: LOC_NM - 생략가능
+					loc_NM: LOC_NM,
+					city_CD: CITY_CD,
+					loc_LAT: LOC_LAT,
+					loc_LONG: LOC_LONG,
+					loc_DESC: LOC_DESC,
+					loc_STRT_TIME: LOC_STRT_TIME
+			    });
+			}
 			
 		}
+	    
+	    
+	    //일정 테이블 변수 시작----------------------------------------
+	    var PL_CD=$("input[name='PL_CD']").val();
+	    var PL_TT=$("input[name='PL_TT']").val();
+	    var PL_STT=$("input[name='PL_STT']").val();
+	    var PL_STRT_DT=$("input[name='PL_STRT_DT']").val();
+	    var PL_END_DT=$("input[name='PL_END_DT']").val();
+	    var PL_PPL=$("input[name='PL_PPL']").val();
+	    var OPEN_CD=$("input[name='OPEN_CD']").val();
+	    //일정 테이블 변수 끝----------------------------------------
+	    
+	    var plan = {
+    		pl_CD: PL_CD,
+    		pl_TT: PL_TT,
+    		pl_STT: PL_STT,
+  			pl_STRT_DT: PL_STRT_DT,
+  			pl_END_DT: PL_END_DT,
+  			pl_PPL: PL_PPL,
+  			open_CD: OPEN_CD
+	    };
+	    
+	    
+	    console.log("공개여부 확인 시작");
+	    var bOpen = $("input[name='OPEN_CD']:checked").val();
+	    console.log("공개여부 확인 종료"+bOpen);
+	    
+	    console.log("인원 확인 시작");
+		var nHum = $("input[name='PL_PPL']").val();
+		console.log("인원 확인 종료"+nHum);
+	    
+	    var sdate = $("input[name='PL_STRT_DT']").val();
+	    console.log("여행시작일: "+sdate);
+	    
+	    var edate = $("input[name='PL_END_DT']").val();
+	    console.log("여행종료일: "+edate);
+	    
+	    var pTT = $("input[name='PL_TT']").val();
+	    console.log("여행대제목: "+pTT);
+	    
+	    var pSTT = $("input[name='PL_STT']").val();
+	    console.log("여행소제목: "+pSTT);	
+	    
+		//-----------------------------------컨트롤러로 배열 값 넘기기 시작
 		
-		//DB 작업용 추가된 장소 name화 종료------------------------------------------------------------------------------
+		//data에는 하나만 넣을 수 있는 건가?
+		//일단 해본다.
+		
+		alert("ajax 입성 ");
+
+		/*
+		consolg.log(LocNmArr);
+		consolg.log(cCityArr);
+		consolg.log(LatArr);
+		consolg.log(LngArr);
+		consolg.log(LocDesArr);
+		consolg.log(tStartArr);
+		*/
+		/*
+		$.ajax({
+			url				: 'insertplan.action',
+			method			: 'POST',
+			//async:false,
+			tranditional	: true,
+			//dataType : 'json',
+			//contentType : "application/x-www-form-urlencoded; charset=UTF-8;",
+			data			: allData,
+			success			: function(data){
+				alert("성공");
+			},
+			error			: function(request, status, error){
+				
+				alert("에러 발생~~ \n" + textStatus + " : " + errorThrown);
+				alert("실패");
+			}
+			
+		});
+	
+		*/
+		
+		/*
+		
+		javascript object n?
+		'{ "key": "value", "arr": [""] }'
+				
+		*/
+		
+		
+		$.ajax({
+		    method      : 'POST',
+		    url         : 'insertplan.action',
+		    contentType: 'application/json;charset=utf-8',
+		    dataType : "json",
+		    data        : JSON.stringify({
+		    	plan: plan,
+		    	locationList: locationList
+		    }),
+		    success     : function(data) {
+		        alert("성공! "+data);
+		        
+		        // 이미지 업로드
+		        //https://makitweb.com/how-to-upload-image-file-using-ajax-and-jquery/
+		        /*
+		        $.ajax({
+				    method      : 'POST',
+				    url         : 'uploadimage.action',
+				    dataType : "json",
+				    data        : {
+				    	
+				    },
+				    success     : function(data) {
+				        alert("성공! "+data);
+				        document.location.href = "";
+				    },
+				    error       : function(request, status, error) {
+				        alert(error);
+				    }
+				 
+				});
+		        */
+		    },
+		    error       : function(request, status, error) {
+		        alert(error);
+		    }
+		 
+		});
+		
+
+
+		//-----------------------------------컨트롤러로 배열 값 넘기기 종료
 		
 	}
+		
+		//DB 작업용 추가된 장소 name화 종료------------------------------------------------------------------------------
 	
 
     // 커스텀 오버레이를 닫기 위해 호출되는 함수입니다
@@ -1475,8 +1420,16 @@
 		
 		$('div[data-index-number="'+idx+'" ]').remove();
 		
-		positions.slice(idx-1, 1);
-		polyline.setMap(null);
+		positions = positions.filter(function(e, idx) {
+			return idx != markIdx - 1;
+		});
+		var linePath = [];
+		if (positions.length >= 2) {
+			for (var idx = 0; idx < positions.length; idx++) {
+				linePath.push(positions[idx].latlng);
+			}
+		}
+		lineLine.setPath(linePath);
 		
  	}
 	

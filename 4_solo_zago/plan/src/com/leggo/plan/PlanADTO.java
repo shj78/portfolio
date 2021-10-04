@@ -1,15 +1,21 @@
 package com.leggo.plan;
 
+import java.math.BigInteger;
+
 public class PlanADTO
 {
 	//PL_IMG 아직 구현안됐음 , 일정 대표이미지, PL_IMG
 	
-	//추가된 장소 테이블								//★ LOC_CD 추가된 장소 코드
-	private Long LOC_CD;
-	private Long PL_CD;
-	private String LOC_NM, CITY_CD					//장소명, 도시 코드
-	, LOC_LAT, LOC_LONG, LOC_DESC 					//추가된 장소 위도, 추가된 장소 경도, 추가된 장소 설명
-	, LOC_STRT_TIME;									// 추가된 장소 도착 시간
+	//추가된 장소 테이블								
+	private Long LOC_CD;			//★ LOC_CD 추가된 장소 코드
+	private String PL_CD;
+	private String LOC_NM;			// 장소명
+	private String CITY_CD;			// 도시 코드
+	private String LOC_LAT;			// 장소 위도
+	private String LOC_LONG;		// 장소 경도
+	private String LOC_DESC; 		// 장소 설명
+	private String LOC_STRT_TIME;	// 장소 도착 시간
+	private String PL_DATE;			// 장소 도착 일
 
 
 	public Long getLOC_CD()
@@ -22,12 +28,12 @@ public class PlanADTO
 		LOC_CD = lOC_CD;
 	}
 
-	public Long getPL_CD()
+	public String getPL_CD()
 	{
 		return PL_CD;
 	}
 
-	public void setPL_CD(Long pL_CD)
+	public void setPL_CD(String pL_CD)
 	{
 		PL_CD = pL_CD;
 	}
@@ -90,6 +96,16 @@ public class PlanADTO
 	public void setLOC_STRT_TIME(String lOC_STRT_TIME)
 	{
 		LOC_STRT_TIME = lOC_STRT_TIME;
+	}
+
+	public String getPL_DATE()
+	{
+		return PL_DATE;
+	}
+
+	public void setPL_DATE(String pL_DATE)
+	{
+		PL_DATE = pL_DATE;
 	}
 
 	

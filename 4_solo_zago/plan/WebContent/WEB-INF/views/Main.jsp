@@ -165,74 +165,27 @@ ol, ul {
 					<div class="question_container">
 			
 						<ol>
-<%-- 						     <%
-					         for (MainDTO dto : lists)
-					         {
-					         %> --%>
-							<li>
-								<a href="/">
-									<div class="question_box" >
-									<img alt="" class="main_planImg" src="images/icecream.jpg" >
-										&nbsp;
-										&nbsp;
+					        <c:forEach var="plan" items="${planList}" >
+					        	<li>
+									<a href="/plan/detail.action?pl_cd=${plan.PL_CD}">
+										<div class="question_box" >
+										<img alt="" class="main_planImg" src="images/icecream.jpg" >
+											&nbsp;
+											&nbsp;
 										<span class="plan_title_B" style="font-size: medium; font-weight: bold !important;">		 
-											연희동에서 연남동까지 맛집투어
+											${plan.PL_TT}
 										</span>
-								</a>
-										<br>
-		
-										<span class="plan_title_S" style="font-size:10px !important;"> 블루 리본 서베이 선정된 음식점 위주! / 연남 토박이 추천하는 카페 </span>
+									</a>
+									<br>
+									<span class="plan_title_S" style="font-size:10px !important;">${plan.PL_STT}</span>
 
-										<span class="q_sub_info" style="font-size:10px !important;">
-											<div>2021/09/26  - 2021/09-27</div>
-											<div><img class="main_profileImg" src="images/profile_1.png">  Deepsea </div>
-										</span>
-								
-							</li>
-							<li>
-								<a href="/">
-									<div class="question_box" >
-									<img alt="" class="main_planImg" src="images/paju_book.jpg" >
-										&nbsp;
-										&nbsp;
-										<span class="plan_title_B" style="font-size: medium; font-weight: bold !important;">		 
-											유유자적,
-											파주 출판 단지
-										</span>
-								</a>
-										<br>
-		
-										<span class="plan_title_S" style="font-size:10px !important;"> while(true){카페코딩-산책} </span>
-
-										<span class="q_sub_info" style="font-size:10px !important;">
-											<div>2021/09/20  - 2021/09-20</div>
-											<div><img class="main_profileImg" src="images/profile_3.png">  jinny </div>
-										</span>
-								
-							</li>
-							<li>
-								<a href="/">
-									<div class="question_box" >
-									<img alt="" class="main_planImg" src="images/worldcup.jpg" >
-										&nbsp;
-										&nbsp;
-										<span class="plan_title_B" style="font-size: medium; font-weight: bold !important;">		 
-											상암 월드컵 공원의 아침 정원!
-										</span>
-								</a>
-										<br>
-		
-										<span class="plan_title_S" style="font-size:10px !important;"> 햇빛 샤워하고 싶은 날 </span>
-
-										<span class="q_sub_info" style="font-size:10px !important;">
-											<div>2021/09/17  - 2021/09-17</div>
-											<div><img class="main_profileImg" src="images/profile_2.jfif">  UYerr </div>
-										</span>
-								
-							</li>
-<%-- 					         <%
-					         }
-					         %> --%>
+									<div class="q_sub_info" style="font-size:10px !important;">
+										<div>${plan.PL_STRT_DT} - ${plan.PL_END_DT}</div>
+										<div><img class="main_profileImg" src="images/profile_1.png">  TBD </div>
+									</div>
+									
+								</li>
+					        </c:forEach>
 						</ol>
 
 				</div>		

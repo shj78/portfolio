@@ -5,10 +5,13 @@
 
 package com.leggo.plan;
 
+import java.util.List;
 
 public interface IPlanDAO
 {
-	  public int insertplan(PlanDTO p);
-	  public int insertaddloc(PlanADTO a);
-	  
+	  int insertplan(PlanDTO p);
+	  int insertaddloc(PlanADTO a);
+	  List<PlanDTO> selectPlanList();
+	  PlanDTO selectPlan(String pl_cd);
+	  List<PlanADTO> selectLocationList(String pl_cd);
 }

@@ -126,9 +126,9 @@
 						<!-- 일정설명에서 날짜 시작-->
 						<div id="top">
 							<input type="text" class="planTop_left" name="PL_STRT_DT"
-								id="sDate" style="width: 10vw" value="시작일 입력"> <input
+								id="sDate" style="width: 10vw" value="${plan.PL_STRT_DT}"> <input
 								type="text" class="planTop_right" name="PL_END_DT" id="eDate"
-								style="width: 10vw" value="종료일 입력">
+								style="width: 10vw" value="${plan.PL_END_DT}">
 						</div>
 	
 					</div>
@@ -139,9 +139,9 @@
 	
 						<div id="planTitle">
 							<input type="text" name="PL_TT" id="planTitleB"
-								value="연희동, 연남동 맛집 투어"> <input type="text"
+								value="${plan.PL_TT}"> <input type="text"
 								name="PL_STT" id="planTitleS"
-								value="블루 리본 서베이 선정된 음식점 위주">
+								value="${plan.PL_STT}">
 						</div>
 						<!-- 일정설명에서 제목 종료 -->
 	
@@ -158,7 +158,7 @@
 						<!-- 일정 예산 인원 시작 -->
 						<div class="quantity planBtm_right btm">
 							<input type="number" name="PL_PPL" min="1" max="20" step="1"
-								value="1">
+								value="${plan.PL_PPL}">
 						</div>
 						<!-- 일정 예산 인원 종료 -->
 	
@@ -181,7 +181,28 @@
 	
 				<!-- 날짜 추가 되는 영역 시작 -->
 	
-				<div id="sortable" class="sortable"></div>
+				<div id="sortable" class="sortable">
+					<c:forEach var="location" items="${locationList}">
+						<div class="day col-xs-12 col-sm-12 col-md-12" data-date="10.04" >
+							${location.PL_DATE}
+						</div>
+						<div class="container-fluid">
+							<div class="row" value="${location.LOC_NM}">
+								<div class="addPlace col-xs-3 col-sm-3 col-md-3" style="letter-spacing: 1px;">
+									${location.LOC_NM}<br>
+									<input name="LOC_STRT_TIME" type="time" min="" max="" disabled value="${location.LOC_STRT_TIME}">
+								</div>
+								<div class="col-xs-8 col-sm-8 col-md-8">
+									<textarea id="LOC_DESC" name="LOC_DESC" rows="4" style="width: 100%" disabled value="${location.LOC_DESC}">${location.LOC_DESC}</textarea>
+								</div>
+								<!-- 
+								<div class="fa fa-window-close col-xs-1 col-sm-1 col-md-1" aria-hidden="true" style="display: inline-block; border: none;"
+									onclick="removePlace('+markIdx+')"></div>
+								-->
+							</div>
+						</div>
+					</c:forEach>
+				</div>
 				<!--  날짜 추가 되는 영역 종료 -->
 	
 				<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
@@ -431,7 +452,9 @@
 									numOvelay[i].setMap(null);
 								}
  */
-								var arr = d.split("/");
+
+ /*
+ 								var arr = d.split("/");
 								var year = arr[0];
 								var month = arr[1];
 								var day = arr[2];
@@ -508,6 +531,7 @@
 
 													}
 												});
+*/
 
 							}
 						});

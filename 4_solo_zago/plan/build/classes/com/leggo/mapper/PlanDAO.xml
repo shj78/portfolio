@@ -7,35 +7,93 @@
 
 <mapper namespace="com.leggo.plan.IPlanDAO" >
 
+
 	<!-- add()호출 -->
 	<!-- 몇행을 인서트 타입 = resulType -->
-	<insert id="insertplan" parameterType="com.leggo.plan.PlanDTO"> 
+	<insert id="insertplan" parameterType="com.leggo.plan.PlanDTO">
+		<selectKey resultType="Long" keyProperty="PL_CD" order="BEFORE">
+	        SELECT PLANSEQ.NEXTVAL FROM DUAL
+	    </selectKey> 
 		INSERT INTO PLAN(PL_CD, MEM_CD, PL_STRT_DT, PL_END_DT
 		, PL_TT, PL_STT, PL_PPL, OPEN_CD)
-		VALUES('PLAN1', 'MEM1', #{PL_STRT_DT, jdbcType=DATE}, #{PL_END_DT, jdbcType=DATE}
+		VALUES(#{PL_CD, jdbcType=NUMERIC}, 'MEM2', #{PL_STRT_DT, jdbcType=DATE}, #{PL_END_DT, jdbcType=DATE}
 		, #{PL_TT, jdbcType=VARCHAR}, #{PL_STT, jdbcType=VARCHAR}, #{PL_PPL, jdbcType=NUMERIC}, #{OPEN_CD, jdbcType=NUMERIC} )  
 	</insert>
 	
- 	<insert id="insertaddloc" parameterType="com.leggo.plan.PlanADTO"> 
+ 	<insert id="insertaddloc" parameterType="com.leggo.plan.PlanADTO">
+ 		<selectKey resultType="Long" keyProperty="LOC_CD" order="BEFORE">
+	        SELECT LOCSEQ.NEXTVAL FROM DUAL
+	    </selectKey>
 		INSERT INTO ADD_LOCATION
 		(LOC_CD, PL_CD
 		, LOC_NM
 		, CITY_CD	 
 		, LOC_LAT, LOC_LONG
 		, LOC_DESC, LOC_STRT_TIME) 
-		VALUES('ADD_LOC1', 'PLAN1'
+		VALUES(#{LOC_CD}, #{PL_CD}
 		, #{LOC_NM}
 		, 'CITY7'
 		, #{LOC_LAT}, #{LOC_LONG}
-		, #{LOC_DESC}, #{LOC_STRT_TIME})	 
+		, #{LOC_DESC}, TO_DATE(#{LOC_STRT_TIME}, 'YYYY-MM-DD HH24:MI'))	 
 	</insert> 
 	
-<!-- 	<select id="planlist" resultType="com.leggo.complan.ComPlanDTO">
-		SELECT MD.MEM_NNM, PL.PL_TT, PL.PL_ST, TO_CHAR(PL.PL_DT, 'YYYY-MM-DD')
-		FROM PLAN PL LEFT JOIN MEMBER_DATA MD
-     	ON PL.MEM_CD = MD.MEM_CD
-	</select> -->
+	<!-- 저장된 일정 목록 조회 -->
+	<select id="selectPlanList" resultType="com.leggo.plan.PlanDTO">
+		SELECT
+		    PL_CD
+		    , MEM_CD
+		    , THEM_CD
+		    , PL_TT
+		    , PL_STT
+		    , TO_CHAR(PL_STRT_DT, 'YYYY/MM/DD') AS PL_STRT_DT
+		    , TO_CHAR(PL_END_DT, 'YYYY/MM/DD') AS PL_END_DT
+		    , PL_IMG
+		    , PL_HITS
+		    , PL_DT
+		    , PL_PPL
+		    , PL_BUD
+		    , OPEN_CD
+		FROM PLAN
+	</select>
 	
+	<!-- 저장된 일정 조회 -->
+	<select id="selectPlan" parameterType="String" resultType="com.leggo.plan.PlanDTO">
+		SELECT
+		    PL_CD
+		    , MEM_CD
+		    , THEM_CD
+		    , PL_TT
+		    , PL_STT
+		    , TO_CHAR(PL_STRT_DT, 'YYYY/MM/DD') AS PL_STRT_DT
+		    , TO_CHAR(PL_END_DT, 'YYYY/MM/DD') AS PL_END_DT
+		    , PL_IMG
+		    , PL_HITS
+		    , PL_DT
+		    , PL_PPL
+		    , PL_BUD
+		    , OPEN_CD
+		FROM PLAN
+		WHERE PL_CD = #{pl_cd}
+	</select>
+	
+	<!-- 저장된 장소 목록 조회 -->
+	<select id="selectLocationList" parameterType="String" resultType="com.leggo.plan.PlanADTO">
+		SELECT
+		    LOC_CD
+		    , PL_CD
+		    , LOC_NM
+		    , CITY_CD
+		    , LOC_LAT
+		    , LOC_LONG
+		    , LOC_DESC
+		    , TO_CHAR(LOC_STRT_TIME, 'HH24:MI') AS LOC_STRT_TIME
+		    , TO_CHAR(LOC_END_TIME, 'HH24:MI') AS LOC_END_TIME
+		    , TO_CHAR(LOC_STRT_TIME, 'MM.DD') AS PL_DATE
+		    , LOC_TRF_CONT
+		FROM ADD_LOCATION
+		WHERE PL_CD = #{pl_cd}
+	</select>
+		
 </mapper>
 
 
