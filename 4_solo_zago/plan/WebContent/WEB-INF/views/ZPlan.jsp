@@ -348,14 +348,6 @@
     var lineLine = new daum.maps.Polyline();
     var distance;
     
-	//-----------------------------------ajax 데이터 넘기기 배열
-
-	//var LocNmArr = []; //장소명 
-	//var cCityArr = []; //도시코드 - 도시명으로 입력되고, 도시코드로 변환되어 insert됨
-	//var LatArr = []; //경도
-	//var LngArr = []; // 위도
-	//var LocDesArr = []; //장소 설명
-	//var tStartArr = []; //장소 시작 시간
 
 	
 	//-----------------------------------일정, 지도 자바스크립트 시작
@@ -1335,106 +1327,7 @@
 			
 		
 		
-		//DB 작업용 추가된 장소 name화 종료------------------------------------------------------------------------------
 		    
-/* 			var bOpenArr = [];
-		    $("input[name='OPEN_CD']:checked").each(function(i, item) {
-
-		    	bOpenArr.push($(item).val());
-		    	
-		    });	
-		    console.log("공개여부 확인 시작");
-		    for (var i in bOpenArr)
-		    {
-		      console.log(i+" 번째 공개여부: "+bOpenArr[i]);
-		      console.log("공개여부 확인 종료");
-		    } */
-		    console.log("공개여부 확인 시작");
-		    var bOpen = $("input[name='OPEN_CD']:checked").val();
-		    console.log("공개여부 확인 종료"+bOpen);
-		    
-		    console.log("인원 확인 시작");
-			var nHum = $("input[name='PL_PPL']").val();
-			console.log("인원 확인 종료"+nHum);
-		    
-		    var sdate = $("input[name='PL_STRT_DT']").val();
-		    console.log("여행시작일: "+sdate);
-		    
-		    var edate = $("input[name='PL_END_DT']").val();
-		    console.log("여행종료일: "+edate);
-		    
-		    var pTT = $("input[name='PL_TT']").val();
-		    console.log("여행대제목: "+pTT);
-		    
-		    var pSTT = $("input[name='PL_STT']").val();
-		    console.log("여행소제목: "+pSTT);	
-		    
-			//-----------------------------------컨트롤러로 배열 값 넘기기 시작
-			
-			//data에는 하나만 넣을 수 있는 건가?
-			//일단 해본다.
-			
-			alert("ajax 입성 ");
-
-			/*
-			consolg.log(LocNmArr);
-			consolg.log(cCityArr);
-			consolg.log(LatArr);
-			consolg.log(LngArr);
-			consolg.log(LocDesArr);
-			consolg.log(tStartArr);
-			*/
-			/*
-			$.ajax({
-				url				: 'insertplan.action',
-				method			: 'POST',
-				//async:false,
-				tranditional	: true,
-				//dataType : 'json',
-				//contentType : "application/x-www-form-urlencoded; charset=UTF-8;",
-				data			: allData,
-				success			: function(data){
-					alert("성공");
-				},
-				error			: function(request, status, error){
-					
-					alert("에러 발생~~ \n" + textStatus + " : " + errorThrown);
-					alert("실패");
-				}
-				
-			});
-		
-			*/
-			
-			
-			$.ajax({
-			    method      : 'POST',
-			    url         : 'insertaddlocation.action',
-			    traditional : true,
-			    data        : {
-			    	'LOC_NM' : LocNmArr,
-					'CITY_CD' : cCityArr,
-					'LOC_LAT' : LatArr,
-					'LOC_LONG' : LngArr,
-					'LOC_DESC' : LocDesArr,
-					'LOC_STRT_TIME' : tStartArr
-			    },
-			    success     : function(data) {
-			        alert("성공! "+data);        
-			    },
-			    error       : function(request, status, error) {
-			        alert(error);
-			    }
-			 
-			});
-			
-
-
-			//-----------------------------------컨트롤러로 배열 값 넘기기 종료
-			
-		}
-		
-		//DB 작업용 추가된 장소 name화 종료------------------------------------------------------------------------------
 		
 	}
 	
