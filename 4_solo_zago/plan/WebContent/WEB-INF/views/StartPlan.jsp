@@ -28,15 +28,16 @@
 }
 
 form {
-  width: 100%;
-  max-width: 500px;
-  margin: 50px auto;
-  background:#fafafa;
-  -webkit-box-shadow: 0px 0px 96px 0px rgba(0,0,0,0.75);
-  -moz-box-shadow: 0px 0px 96px 0px rgba(0,0,0,0.75);
-  box-shadow: 0px 0px 96px 0px rgba(0,0,0,0.75);
-  min-height: 250px;
-  padding: 40px;
+    width: 100%;
+    max-width: 500px;
+    margin: 50px auto;
+    /* background: #fafafa; */
+    /* -webkit-box-shadow: 0px 0px 96px 0px rgb(0 0 0 / 75%); */
+    -moz-box-shadow: 0px 0px 96px 0px rgba(0,0,0,0.75);
+    /* box-shadow: 0px 0px 96px 0px rgb(0 0 0 / 75%); */
+    min-height: 200px;
+    padding: 40px;
+    border-radius: 10px;
 }
 
 form input {
@@ -152,7 +153,7 @@ h5 {
   }
 
 .button:hover {
-  background-color: #12a1ff!important;
+  background-color: #767575!important;
   box-shadow: 0px 15px 20px rgba(46, 229, 157, 0.4) !important;
   color: #fff !important;
   transform: translateY(-7px) !important;

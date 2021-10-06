@@ -57,6 +57,14 @@
 	width:10px; 
 	display:inline;
 	padding: 0 0 3px 0;
+
+}
+
+.planTop_left:hover{
+	background-color: white;
+}
+.planTop_right:hover{
+	background-color: white;
 }
 </style>
 
@@ -126,9 +134,10 @@
 						<!-- 일정설명에서 날짜 시작-->
 						<div id="top">
 							<input type="text" class="planTop_left" name="PL_STRT_DT"
-								id="sDate" style="width: 10vw" value="${plan.PL_STRT_DT}"> <input
-								type="text" class="planTop_right" name="PL_END_DT" id="eDate"
-								style="width: 10vw" value="${plan.PL_END_DT}">
+								id="sDate" style="width: 10vw" value="${plan.PL_STRT_DT}" disabled> 
+							<input
+								type="text" class="planTop_right" name="PL_END_DT" 
+								id="eDate"style="width: 10vw" value="${plan.PL_END_DT}" disabled>
 						</div>
 	
 					</div>
@@ -139,9 +148,9 @@
 	
 						<div id="planTitle">
 							<input type="text" name="PL_TT" id="planTitleB"
-								value="${plan.PL_TT}"> <input type="text"
+								value="${plan.PL_TT}" disabled> <input type="text"
 								name="PL_STT" id="planTitleS"
-								value="${plan.PL_STT}">
+								value="${plan.PL_STT}" disabled>
 						</div>
 						<!-- 일정설명에서 제목 종료 -->
 	
@@ -158,7 +167,7 @@
 						<!-- 일정 예산 인원 시작 -->
 						<div class="quantity planBtm_right btm">
 							<input type="number" name="PL_PPL" min="1" max="20" step="1"
-								value="${plan.PL_PPL}">
+								value="${plan.PL_PPL}"  readonly>
 						</div>
 						<!-- 일정 예산 인원 종료 -->
 	
@@ -171,10 +180,10 @@
 	
 					<div class="pull-me"></div>
 					 
-					<div id="btnPlusD">
+<!-- 					<div id="btnPlusD">
 						<button type="button" onclick="add()" id="btn-cancel" class="btn btns"
 							style="float: right !important;"> <i class="fas fa-plus"></i></button>
-					</div>
+					</div> -->
 					
 	
 				</div>
@@ -289,11 +298,11 @@
 				<div id="menu_wrap" class="bg_white">
 					<div class="option">
 						<div>
+						
 							<form onsubmit="searchPlaces(); return false;">
-<%-- 								키워드 : <input type="text" value="<%=keyword%>" id="keyword"
-									size="15" > --%>
-								키워드 : <input type="text" value="연남 맛집" id="keyword"
-									size="15" >
+								<c:forEach var = "location" items="${locationList}" begin="0" end="1" >
+								키워드 : <input type="text" value="${location.LOC_NM}" id="keyword" size="15" >
+								</c:forEach>
 								<button type="submit">검색하기</button>
 							</form>
 						</div>
@@ -954,32 +963,26 @@
 	
 	function selDate()
 	{
-		//var nDiv = $("textarea[id=LOC_DESC]").length;
+
 		markIdx = markIdx+1;
-/* 		alert(markIdx);
 		
-		alert("현재장소의 개수: "+markIdx); */
-		
-		var selDate = $('label > input:radio[name=datesRadio]:checked').val(); //선택된 날짜에 해당하는 input 태그 value값을 가져온다
+		//선택된 날짜에 해당하는 input 태그 value값을 가져온다
+		var selDate = $('label > input:radio[name=datesRadio]:checked').val(); 
 		var arrDt = selDate.split("/");
-		//alert("arrDt[0]: "+arrDt[0]);
-		//alert("arrDt[1]: "+arrDt[1]);
-		//alert("arrDt[2]: "+arrDt[2]);
+
 		
 		var ymd = arrDt[0]+":"+arrDt[1]+":"+arrDt[2]+":";
 		
 		var hdnName = $("#hdnName").attr('value');
 		//장소의 도시명과 장소 이름
 		var arrCN = hdnName.split("<br>");
-		//alert("도시명: "+arrCN[0]);
-		//alert("장소이름: "+arrCN[1]);
+
 		
 		//해당 장소의 경도 위도 받아오기 
 		var hdnLatLng = $("#hdnLatLng").attr('value');
 		
 		var arrLL = hdnLatLng.split("/");
-		//alert("경도명: "+arrLL[0]);
-		//alert("위도명: "+arrLL[1]);
+
 		
 		
 
@@ -1124,10 +1127,7 @@
 		      console.log(i+" 번째 도착시간: "+tStartArr[i]);
 		      console.log("도착시간끝");
 		    }
-			/*
-		    console.log("공개여부 확인 시작");
-		    var bOpenArr = $("input[name='OPEN_CD']:checked").val();
-		    console.log("공개여부 확인 종료"+bOpenArr);*/
+
 		    
 		    console.log("인원 확인 시작");
 			var nHumArr = $("input[name='PL_PPL']").val();
@@ -1327,7 +1327,34 @@
 			
 		
 		
+		//DB 작업용 추가된 장소 name화 종료------------------------------------------------------------------------------
 		    
+
+		    console.log("공개여부 확인 시작");
+		    var bOpen = $("input[name='OPEN_CD']:checked").val();
+		    console.log("공개여부 확인 종료"+bOpen);
+		    
+		    console.log("인원 확인 시작");
+			var nHum = $("input[name='PL_PPL']").val();
+			console.log("인원 확인 종료"+nHum);
+		    
+		    var sdate = $("input[name='PL_STRT_DT']").val();
+		    console.log("여행시작일: "+sdate);
+		    
+		    var edate = $("input[name='PL_END_DT']").val();
+		    console.log("여행종료일: "+edate);
+		    
+		    var pTT = $("input[name='PL_TT']").val();
+		    console.log("여행대제목: "+pTT);
+		    
+		    var pSTT = $("input[name='PL_STT']").val();
+		    console.log("여행소제목: "+pSTT);	
+		    
+
+			
+		}
+		
+		//DB 작업용 추가된 장소 name화 종료------------------------------------------------------------------------------
 		
 	}
 	
@@ -1377,27 +1404,7 @@
         min = input.attr('min'),
         max = input.attr('max');
 
-      btnUp.click(function() {
-        var oldValue = parseFloat(input.val());
-        if (oldValue >= max) {
-          var newVal = oldValue;
-        } else {
-          var newVal = oldValue + 1;
-        }
-        spinner.find("input").val(newVal);
-        spinner.find("input").trigger("change");
-      });
 
-      btnDown.click(function() {
-        var oldValue = parseFloat(input.val());
-        if (oldValue <= min) {
-          var newVal = oldValue;
-        } else {
-          var newVal = oldValue - 1;
-        }
-        spinner.find("input").val(newVal);
-        spinner.find("input").trigger("change");
-      });
 
     });
 	

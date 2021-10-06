@@ -30,7 +30,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-/*스프링컨테이너야 com.test.mybatis 패키지 둘러보다가 이 클래스가 보이면 콘트롤러로 취급해주면돼*/
+
 @Controller
 public class PlanMain
 {
@@ -57,24 +57,33 @@ public class PlanMain
 
 	}
 	
+	//get이니 데이터 조회
 	@RequestMapping(value = "main.action", method = RequestMethod.GET)
 	public String mainpage(ModelMap model, HttpServletRequest request)
 	{
 
 		String result = "WEB-INF/views/Main.jsp";
 		
+		//sqlSession 객체에서 getMapper()를 실행해 오버라이딩 된 인터페이스 객체를 얻어옴
+		//왜 sqlSession을 이용하지?:
 		IPlanDAO dao = sqlSession.getMapper(IPlanDAO.class);
+		
+		//일정 목록을 가져옴
 		List<PlanDTO> planList = dao.selectPlanList();
 //		List<PlanResponseDTO> planResponseList = new ArrayList<>();
 //		for (PlanDTO dto : planList) {
 //			planResponseList.add(PlanResponseDTO.buildFromPlanDTO(dto));
 //		}
 		
+		//넘길 데이터를 k,v 형태로 넣으면 스프링은 그 값을 뷰로 넘겨줌
 		model.addAttribute("planList", planList);
+		
+		//뷰 파일 리턴 
 		return result;
 
 	}
 	
+	/* 일정 작성 내용 인서트 완료 후 저장된 일정 화면 */	
 	@RequestMapping(value = "detail.action", method = RequestMethod.GET)
 	public String detailPage(@RequestParam(value = "pl_cd", required = true) String pl_cd, Model model)
 	{
@@ -83,16 +92,18 @@ public class PlanMain
 		
 		IPlanDAO dao = sqlSession.getMapper(IPlanDAO.class);
 		
+		//일정 테이블
 		PlanDTO plan = dao.selectPlan(pl_cd);
 		model.addAttribute("plan", plan);
 		
+		//추가된 장소 테이블
 		List<PlanADTO> locationList = dao.selectLocationList(pl_cd);
 		model.addAttribute("locationList", locationList);
 		
 		return result;
 	}
 	
-	
+	/* 일정 작성 시작 화면 */
 	@RequestMapping(value = "startplan.action", method = RequestMethod.GET)
 	public String startpage(ModelMap model, HttpServletRequest request)
 	{
@@ -102,6 +113,7 @@ public class PlanMain
 
 	}
 
+	/* 일정 작성 시작 이후 작성 화면 */
 	@RequestMapping(value = "writeplan.action", method = RequestMethod.GET)
 	public String writepage(ModelMap model, HttpServletRequest request)
 	{
@@ -115,19 +127,7 @@ public class PlanMain
 
 	}
 	
-	
-	/* 미완 */
-	/* 일정 작성 내용 인서트 완료 후 저장된 일정 작성 화면 */
-	@RequestMapping(value ="saveplan.action", method=RequestMethod.GET) 
-	public String saveplan(PlanDTO p) 
-	{ 
-		// IPlanDAO dao = sqlSession.getMapper(IPlanDAO.class);
-	  
-		 return "WEB-INF/views/SavePlan.jsp";
-	  
-	}
-	
-	
+	/* 일정 인서트 */
 	@RequestMapping(value = "insertplan.action", method = {RequestMethod.GET, RequestMethod.POST})
 	@ResponseBody
 	 public String insertplan(@RequestBody String body)
@@ -190,6 +190,7 @@ public class PlanMain
 		return "";
 	}
 
+	/*
 	@RequestMapping(value = "insertaddlocation.action", method = {RequestMethod.GET, RequestMethod.POST})
 	 public String insertplan(List<PlanADTO> locationList)
 	{
@@ -249,7 +250,7 @@ public class PlanMain
 			
 
 
-			
+	/*		
 		}
 		catch(Exception ex) {
 			ex.printStackTrace();
@@ -259,6 +260,7 @@ public class PlanMain
 	    
 
 	}
+	*/
 
 	  
 }

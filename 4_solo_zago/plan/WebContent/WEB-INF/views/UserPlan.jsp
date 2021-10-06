@@ -60,7 +60,7 @@
 		<header>
 
 			<div class = "nav_container b_text">
-			<a href="/">
+			<a href="main.action">
 				<img src="images/logo_zago.png" style="height:70px !important" alt="Za, GO." />
 			</a>
 				<div class="hor_category l_text">

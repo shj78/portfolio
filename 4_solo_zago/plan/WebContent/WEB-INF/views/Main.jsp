@@ -145,6 +145,10 @@ ol, ul {
 							<li class="nav-item">
 								<a href="">회원가입</a>
 							</li>
+							
+							<li class="nav-item">
+								<a href="startplan.action">일정 작성 하기</a>
+							</li>
 
 						</ul>
 					</div>
@@ -165,16 +169,19 @@ ol, ul {
 					<div class="question_container">
 			
 						<ol>
+							<!-- main.action url을 통해 mainpage 메소드가 실행되어서 planList 모델 도착 -->
+					        <!-- PlanDTO 객체가 담긴 List 컬렉션 -->
 					        <c:forEach var="plan" items="${planList}" >
 					        	<li>
 									<a href="/plan/detail.action?pl_cd=${plan.PL_CD}">
 										<div class="question_box" >
-										<img alt="" class="main_planImg" src="images/icecream.jpg" >
-											&nbsp;
-											&nbsp;
-										<span class="plan_title_B" style="font-size: medium; font-weight: bold !important;">		 
-											${plan.PL_TT}
-										</span>
+											<img alt="" class="main_planImg" src="images/icecream.jpg" >
+												&nbsp;
+												&nbsp;
+											<span class="plan_title_B" style="font-size: medium; font-weight: bold !important;">		 
+												${plan.PL_TT}
+											</span>
+										</div>
 									</a>
 									<br>
 									<span class="plan_title_S" style="font-size:10px !important;">${plan.PL_STT}</span>
