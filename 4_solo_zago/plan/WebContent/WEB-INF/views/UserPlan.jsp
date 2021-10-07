@@ -154,18 +154,21 @@
 	
 						<div id="planTitle">
 							<input type="text" name="PL_TT" id="planTitleB"
-								value="자, 고~!"> <input type="text"
+								value="일정의 제목을 입력해주세요!"> <input type="text"
 								name="PL_STT" id="planTitleS"
-								value="몽이랑 혜진이랑">
+								value="일정의 소제목을 입력해주세요!">
 						</div>
 						<!-- 일정설명에서 제목 종료 -->
 	
 						<!-- 일정설명에서 프로필 시작 -->
-						<!-- 
+						
 						<div id="planImg">
-							<img></img>
+							<!-- <a href="#" onclick="javascript:windoow.open('www.naver.com','new','left=50, top=50, width=800, height=600')"> -->
+							<a href="#" onClick="window.open('uploadimage.action','네이버','width=800, height=700, toolbar=no, menubar=no, scrollbars=no, resizable=yes');return false;">
+							<img src="img1.png" ></img>
+							</a>
 						</div>
-						 -->
+						
 						<!-- 일정설명에서 프로필 종료 -->
 	
 						<br> <br> <br> <br> <br> <br>

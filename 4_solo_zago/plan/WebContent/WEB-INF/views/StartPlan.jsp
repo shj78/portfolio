@@ -20,6 +20,15 @@
 
 </script>
 <style>
+header{
+border-bottom: solid #f7f7f7 4px;
+}
+.img{ display: flex;
+padding: 10px;
+    margin: auto;
+}
+</style>
+<style>
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@500&display=swap');
 *
 {
@@ -29,7 +38,7 @@
 
 form {
     width: 100%;
-    max-width: 500px;
+    max-width: 400px;
     margin: 50px auto;
     /* background: #fafafa; */
     /* -webkit-box-shadow: 0px 0px 96px 0px rgb(0 0 0 / 75%); */
@@ -65,7 +74,7 @@ form input {
     z-index: 1;
     font-size: 12px;
     border-radius: 10px;
-    top: 45% !important;
+    top: 15% !important;
     left:30% !important;
     right:50% !important;
 }
@@ -174,22 +183,26 @@ h5 {
 <body>
 	
 
-<!-- 	<form>
-		<h2>일정 시작지 검색</h2>
-		<input type="text" placeholder="Test input"> <input
-			type="text" placeholder="Test input 2">
-	</form> -->
+	<div id="header">
 	
-	<div class="map_wrap">
+		<header>
 
 	
+			<a href="main.action">
+				<img  class="img" src="images/logo_zago.png" style="height:70px !important" alt="Za, GO." />
+			</a>	
+		
+		</header>
+	</div>
+
+
 	    <div id="menu_wrap" class="bg_white">
 	        <div class="option">
 	            <div>
 	                <form onsubmit="searchPlaces(); return false;" method="post">
 	                	<br>
 	                    <br>
-	                    <p>일정 시작지 검색</p> <input type="text" value="쌍용강북교육센터" id="keyword" name = "keyword" size="15"> 
+	                    <p>일정 시작지 검색</p> <input type="text" value="광화문역" id="keyword" name = "keyword" size="15"> 
 	                    <br>
 	                    <br>
 	                    <button type="submit" class="button" style=" width: 140px !important; height: 45px!important;   background-color: #fff; border: none!important; border-radius: 45px!important; box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1)!important; cursor: pointer;]">검색하기</button> 
@@ -210,7 +223,8 @@ h5 {
 	        <br>
 	        <br>
 	    </div>
-	</div>
+
+
 </body>
 
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=89f516b15bc73fd13f9d3d558582f8a3&libraries=services"></script>
@@ -332,7 +346,7 @@ h5 {
 				{
 					displayInfowindow(marker, title);
 					$("#keyword").val(title);
-					$("#keyword").css("color", "rgb(75 119 179)");
+					$("#keyword").css("color", "rgb(163 163 163)");
 				};
 
 

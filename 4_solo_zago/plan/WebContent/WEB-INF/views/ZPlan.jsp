@@ -66,6 +66,9 @@
 .planTop_right:hover{
 	background-color: white;
 }
+textarea {
+	resize:none !important;
+}
 </style>
 
 </head>
@@ -77,7 +80,7 @@
 		<header>
 
 			<div class = "nav_container b_text">
-			<a href="/writeplan.action">
+			<a href="main.action">
 				<img src="images/logo_zago.png" style="height:70px !important" alt="Za, GO." />
 			</a>
 				<div class="hor_category l_text">
@@ -300,7 +303,7 @@
 						<div>
 						
 							<form onsubmit="searchPlaces(); return false;">
-								<c:forEach var = "location" items="${locationList}" begin="0" end="1" >
+								<c:forEach var = "location" items="${locationList}" begin="0" end="0" >
 								키워드 : <input type="text" value="${location.LOC_NM}" id="keyword" size="15" >
 								</c:forEach>
 								<button type="submit">검색하기</button>
