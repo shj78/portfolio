@@ -129,8 +129,7 @@
 	<section class="banner style1">
 	
 		<!-- start left -->
-		<form action="insertplan.action" method="GET" > 
-		
+		<form>
 			<div class="content" style="overflow: scroll;">
 	
 				<!-- 일정설명이 이뤄질 div 시작 -->
@@ -162,13 +161,13 @@
 	
 						<!-- 일정설명에서 프로필 시작 -->
 						
-						<div id="planImg">
-							<!-- <a href="#" onclick="javascript:windoow.open('www.naver.com','new','left=50, top=50, width=800, height=600')"> -->
+<!-- 						<div id="planImg">
+							<a href="#" onclick="javascript:windoow.open('www.naver.com','new','left=50, top=50, width=800, height=600')">
 							<a href="#" onClick="window.open('uploadimage.action','네이버','width=800, height=700, toolbar=no, menubar=no, scrollbars=no, resizable=yes');return false;">
 							<img src="img1.png" ></img>
 							</a>
 						</div>
-						
+ -->						
 						<!-- 일정설명에서 프로필 종료 -->
 	
 						<br> <br> <br> <br> <br> <br>
@@ -195,6 +194,10 @@
 					</div>
 					
 	
+				</div>
+				<div id="planImg">
+					<!-- <a href="#" onclick="javascript:windoow.open('www.naver.com','new','left=50, top=50, width=800, height=600')"> -->
+					<input type="file" name="image" id="imageFile" accept=".jpg, .jpeg, .png">
 				</div>
 	
 				<!-- 날짜 추가 되는 영역 시작 -->
@@ -268,10 +271,10 @@
 	
 	
 			</div>
-							<div id="save">
-					<button type="button" class="btn btns" data-toggle="modal"
-						data-target="#example2Modal" style="outline: none !important;">Save</button>
-				</div>
+			<div id="save">
+				<button type="button" class="btn btns" data-toggle="modal"
+					data-target="#example2Modal" style="outline: none !important;">Save</button>
+			</div>
 		</form>
 		<!-- end left -->
 
@@ -1359,28 +1362,31 @@
 		    	locationList: locationList
 		    }),
 		    success     : function(data) {
-		        alert("성공! "+data);
+		        alert("성공! " + data);
 		        
 		        // 이미지 업로드
-		        //https://makitweb.com/how-to-upload-image-file-using-ajax-and-jquery/
-		        /*
-		        $.ajax({
-				    method      : 'POST',
-				    url         : 'uploadimage.action',
-				    dataType : "json",
-				    data        : {
-				    	
-				    },
-				    success     : function(data) {
-				        alert("성공! "+data);
-				        document.location.href = "";
-				    },
-				    error       : function(request, status, error) {
-				        alert(error);
-				    }
-				 
-				});
-		        */
+		        // https://makitweb.com/how-to-upload-image-file-using-ajax-and-jquery/
+		        var formData = new FormData();
+		        var imageFiles = $('#imageFile')[0].files;
+		        if (imageFiles.length > 0) {
+		        	formData.append('image', imageFiles[0]);
+		        	formData.append('PL_CD', data.PL_CD);
+		        	
+		        	$.ajax({
+					    url: 'uploadpage.action',
+			            type: 'post',
+			            data: formData,
+			            contentType: false,
+			            processData: false,
+					    success     : function(data) {
+					        alert("성공! "+data);
+					        document.location.href = "/plan/main.action";
+					    },
+					    error       : function(request, status, error) {
+					        alert(error);
+					    }
+					});
+		        }
 		    },
 		    error       : function(request, status, error) {
 		        alert(error);
