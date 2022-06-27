@@ -1,0 +1,18 @@
+{
+    "telemetry.machineId": "6352b32d-3584-4e94-98f0-2ccc027366a3",
+    "openedPathsList": {
+        "workspaces3": [
+            {
+                "id": "0276219a9fd799347ff5bf3b6697a777",
+                "configURIPath": "file:///c%3A/ECS/study/spring/statistics/.metadata/codemix.code-workspace"
+            },
+            {
+                "id": "5379aeae1ee567c21fe2d7035def4397",
+                "configURIPath": "file:///c%3A/ECS/study/spring/core/.metadata/codemix.code-workspace"
+            }
+        ],
+        "files2": []
+    },
+    "theme": "vs-dark",
+    "themeBackground": "#221a0f"
+}

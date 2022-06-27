@@ -1,0 +1,2 @@
+INDEX VERSION 1.131+C:\ECS\study\vue\toy-vue-statistics\.metadata\.plugins\org.eclipse.jdt.core
+1896386436.index

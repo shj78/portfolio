@@ -1,0 +1,4 @@
+INDEX VERSION 1.131+C:\ECS\study\spring\statistics\.metadata\.plugins\org.eclipse.jdt.core
+2173082611.index
+2119046961.index
+3084232480.index
