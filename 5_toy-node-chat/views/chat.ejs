@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>채팅 페이지</title>
+    <link rel="stylesheet" href="stylesheets/style.css">
+    <script type="text/javascript" src='/node_modules/jquery/dist/jquery.min.js'></script>
+    <script>
+        $(function(){
+
+            $('#logout').click(function(){
+                location.href="/auth/logout";
+            });
+            
+        })
+    </script>
+</head>
+<body>
+    <div class="login-container">
+        <h3 id="greet"><% if(user) { %>
+            <%=user.name %>님 안녕하세요.</h3><% } %>
+            <button type="button" id="logout" style="cursor: pointer;">&nbsp;로그아웃&nbsp;  </button>
+    </div>
+    <div class="wrapper">
+        <div class="user-container">
+            <!--채팅 메시지테이블  시작 -->
+            대화명 :&nbsp;<input type="text" id="nickname">
+        </div>
+        <div class="display-container">
+             <!--채팅 메시지 시작 -->
+            <ul class="chatting-list"> 
+            
+            </ul>
+            <!--채팅 메시지 끝 -->
+    
+        </div>
+        <div class="input-container"> 
+            <input type="text" class="chatting-input">
+            <button class="send-button" style="cursor: pointer;">전송</button>
+        </div>
+    </div>
+    <!-- <script src="/socket.io/socket.io.js"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.4.0/socket.io.js" charset="UTF-8"></script>
+    <script src="javascripts/chatting.js" charset="UTF-8"></script>  
+    <script>
+        localStorage.setItem('username', 'test');
+        sessionStorage.setItem('username', 'test');
+    </script>
+</body>
+</html>

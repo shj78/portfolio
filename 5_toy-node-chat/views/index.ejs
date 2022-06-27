@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <title>로그인 페이지</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <script type="text/javascript" src='/node_modules/jquery/dist/jquery.min.js'></script>
+    <script type="text/javascript" src='/node_modules/axios/dist/axios.min.js'></script>
+    <script>
+      $(function()
+      { 
+        $('#login').click(function(){ 
+          const email = $("#email").val(); 
+          const password = $("#password").val();    
+          
+          // 기본 값은 false
+          // axios를 통한 통신 시 인증 쿠키값을 전달하기 위한 설정 
+          axios.defaults.withCredentials = true;
+
+          axios.post("/auth/login",{
+            email, password
+          })
+          // 성공했다면 - 200
+          .then(res => {
+            if(res.data==1) location.href="/"})
+          // 실패했다면 
+          .catch(err => console.log('AXIOS 실패. : %s', err));
+        });
+
+        $('#logout').click(function() {
+          location.href="/auth/logout";
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <div id="login-box">
+      <br>`
+      <br>
+      <h1>로그인</h1>
+      <br>
+      <br>
+      <br>
+      <form>
+        아이디 : <input id="email">
+        <br>
+        비밀번호 : <input type="password" id="password">
+        <button type="button" id="login" style="cursor:pointer"> 로그인 </button>
+        <br>
+        <br>
+        <a href="/join">회원가입</a>
+        <a href="">구글 로그인</a>
+      </form>
+    </div>
+  </body>
+</html>
